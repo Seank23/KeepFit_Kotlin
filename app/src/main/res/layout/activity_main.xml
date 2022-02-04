@@ -6,6 +6,42 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <androidx.drawerlayout.widget.DrawerLayout
+        android:id="@+id/dlSettings"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="right"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.navigation.NavigationView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="right"
+            android:fitsSystemWindows="true">
+
+            <ImageView
+                android:id="@+id/btnCloseDrawer"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="28dp"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:src="@drawable/ic_back"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/main_color_1"
+                android:translationZ="1dp"/>
+
+        </com.google.android.material.navigation.NavigationView>
+
+    </androidx.drawerlayout.widget.DrawerLayout>
+
     <FrameLayout
         android:id="@+id/flFragment"
         android:layout_width="match_parent"
@@ -26,28 +62,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:menu="@menu/bottom_nav_menu" />
 
-    <androidx.drawerlayout.widget.DrawerLayout
-        android:id="@+id/drawerLayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="right">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-
-        <com.google.android.material.navigation.NavigationView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            app:headerLayout="@layout/nav_header"
-            app:menu="@menu/nav_drawer_menu"
-            android:layout_gravity="right"
-            android:fitsSystemWindows="true" />
-
-    </androidx.drawerlayout.widget.DrawerLayout>
-
     <ImageView
-        android:id="@+id/settingsButton"
+        android:id="@+id/btnSettings"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_marginTop="28dp"
