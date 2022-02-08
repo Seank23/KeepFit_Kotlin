@@ -29,15 +29,18 @@ class MainActivity : AppCompatActivity() {
         val homeFragment = HomeFragment()
         val goalsFragment = GoalsFragment()
         val historyFragment = HistoryFragment()
-        setCurrentFragment(homeFragment)
+        val settingsFragment = SettingsFragment()
+
+        setCurrentFragment(homeFragment, R.id.flFragment)
+        setCurrentFragment(settingsFragment, R.id.flFragmentSettings)
 
         // Navigation bar setup
         val navView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
         navView.setOnItemSelectedListener {
             when(it.itemId) {
-                R.id.navHome -> setCurrentFragment(homeFragment)
-                R.id.navGoals -> setCurrentFragment(goalsFragment)
-                R.id.navHistory -> setCurrentFragment(historyFragment)
+                R.id.navHome -> setCurrentFragment(homeFragment, R.id.flFragment)
+                R.id.navGoals -> setCurrentFragment(goalsFragment, R.id.flFragment)
+                R.id.navHistory -> setCurrentFragment(historyFragment, R.id.flFragment)
             }
             true
         }
@@ -59,9 +62,9 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun setCurrentFragment(fragment: Fragment) =
+    private fun setCurrentFragment(fragment: Fragment, frameLayout: Int) =
         supportFragmentManager.beginTransaction().apply {
-            replace(R.id.flFragment, fragment)
+            replace(frameLayout, fragment)
             commit()
         }
 

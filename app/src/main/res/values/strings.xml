@@ -2,4 +2,8 @@
     <string name="app_name">KeepFit</string>
     <string name="open">Open</string>
     <string name="close">Close</string>
+    <string-array name="themes">
+        <item>Light Theme</item>
+        <item>Dark Theme</item>
+    </string-array>
 </resources>
