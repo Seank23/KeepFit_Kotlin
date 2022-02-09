@@ -1,14 +1,11 @@
-package com.example.keepfit_kotlin
+package com.example.keepfit_kotlin.ui.home
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.example.keepfit_kotlin.R
 
 class HomeFragment : Fragment(R.layout.fragment_home) {
 

@@ -1,9 +1,10 @@
-package com.example.keepfit_kotlin
+package com.example.keepfit_kotlin.ui.settings
 
 import android.os.Bundle
 import android.view.View
 import android.widget.*
 import androidx.fragment.app.Fragment
+import com.example.keepfit_kotlin.R
 
 class SettingsFragment : Fragment(R.layout.fragment_settings), AdapterView.OnItemSelectedListener {
 

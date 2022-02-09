@@ -1,4 +1,4 @@
-package com.example.keepfit_kotlin
+package com.example.keepfit_kotlin.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -7,6 +7,11 @@ import android.view.View
 import android.widget.*
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
+import com.example.keepfit_kotlin.R
+import com.example.keepfit_kotlin.ui.goals.GoalsFragment
+import com.example.keepfit_kotlin.ui.history.HistoryFragment
+import com.example.keepfit_kotlin.ui.home.HomeFragment
+import com.example.keepfit_kotlin.ui.settings.SettingsFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
