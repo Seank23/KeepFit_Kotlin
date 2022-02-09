@@ -10,7 +10,9 @@ import com.example.keepfit_kotlin.R
 import com.example.keepfit_kotlin.data.Goal
 import com.example.keepfit_kotlin.databinding.ItemGoalBinding
 
-class GoalsAdapter(var goals: List<Goal>) : RecyclerView.Adapter<GoalsAdapter.GoalViewHolder>() {
+class GoalsAdapter : RecyclerView.Adapter<GoalsAdapter.GoalViewHolder>() {
+
+    private var goalsList = emptyList<Goal>()
 
     inner class GoalViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
@@ -21,12 +23,17 @@ class GoalsAdapter(var goals: List<Goal>) : RecyclerView.Adapter<GoalsAdapter.Go
 
     override fun onBindViewHolder(holder: GoalViewHolder, position: Int) {
         holder.itemView.apply {
-            findViewById<TextView>(R.id.lblTitle).text = goals[position].name
-            findViewById<CheckBox>(R.id.chbActive).isChecked = goals[position].isActive
+            findViewById<TextView>(R.id.lblTitle).text = goalsList[position].name
+            findViewById<CheckBox>(R.id.chbActive).isChecked = goalsList[position].isActive
         }
     }
 
     override fun getItemCount(): Int {
-        return goals.size
+        return goalsList.size
+    }
+
+    fun setData(goals: List<Goal>) {
+        goalsList = goals
+        notifyDataSetChanged()
     }
 }

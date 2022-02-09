@@ -2,20 +2,17 @@ package com.example.keepfit_kotlin.data
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
 
-class GoalDao {
+@Dao
+interface GoalDao {
 
-    private val goalList = mutableListOf<Goal>()
-    private val goals = MutableLiveData<List<Goal>>()
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun addGoal(goal: Goal)
 
-    init {
-        goals.value = goalList
-    }
-
-    fun addGoal(goal: Goal) {
-        goalList.add(goal)
-        goals.value = goalList
-    }
-
-    fun getGoals() = goals as LiveData<List<Goal>>
+    @Query("SELECT * FROM goal_data ORDER BY id ASC")
+    fun getGoals(): LiveData<List<Goal>>
 }

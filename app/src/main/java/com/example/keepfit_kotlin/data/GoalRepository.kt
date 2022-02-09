@@ -1,19 +1,12 @@
 package com.example.keepfit_kotlin.data
 
-class GoalRepository private constructor(private val goalDao: GoalDao) {
+import androidx.lifecycle.LiveData
 
-    fun addGoal(goal: Goal) {
+class GoalRepository(private val goalDao: GoalDao) {
+
+    val getGoals: LiveData<List<Goal>> = goalDao.getGoals()
+
+    suspend fun addGoal(goal: Goal) {
         goalDao.addGoal(goal)
-    }
-
-    fun getGoals() = goalDao.getGoals()
-
-    companion object {
-        @Volatile private var instance: GoalRepository? = null
-
-        fun getInstance(goalDao: GoalDao) =
-            instance ?: synchronized(this) {
-                instance ?: GoalRepository(goalDao).also { instance = it }
-            }
     }
 }

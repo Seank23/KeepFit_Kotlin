@@ -1,14 +1,32 @@
 package com.example.keepfit_kotlin.ui.goals
 
-import androidx.lifecycle.ViewModel
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.viewModelScope
 import com.example.keepfit_kotlin.data.Goal
+import com.example.keepfit_kotlin.data.GoalDatabase
 import com.example.keepfit_kotlin.data.GoalRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
-class GoalsViewModel(private val goalRepository: GoalRepository) : ViewModel() {
+class GoalsViewModel(application: Application) : AndroidViewModel(application) {
 
-    fun getGoals() = goalRepository.getGoals()
+    val getGoals: LiveData<List<Goal>>
+    private val repository: GoalRepository
 
-    fun getGoalCount() = if(getGoals().value != null) getGoals().value?.size else 0
+    init {
+        val goalDao = GoalDatabase.getDatabase(application).goalDao()
+        repository = GoalRepository(goalDao)
+        getGoals = repository.getGoals
+    }
 
-    fun addGoal(goal: Goal) = goalRepository.addGoal(goal)
+    fun getGoalCount() = if(getGoals.value != null) getGoals.value?.size else 0
+
+    fun addGoal(goal: Goal) {
+
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.addGoal(goal)
+        }
+    }
 }
