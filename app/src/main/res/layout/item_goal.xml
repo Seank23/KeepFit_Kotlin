@@ -3,29 +3,79 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="100dp"
-    android:padding="16dp">
+    android:layout_height="80dp"
+    android:padding="8dp">
 
-    <TextView
-        android:id="@+id/lblTitle"
+    <FrameLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:text="Title"
-        android:textSize="24sp"
+        android:layout_gravity="center"
+        android:layout_marginEnd="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/chbActive"
+        app:layout_constraintEnd_toStartOf="@+id/btnGoalEdit"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
 
-    <CheckBox
-        android:id="@+id/chbActive"
+        <Button
+            android:id="@+id/tbtnGoal"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:backgroundTint="@color/white"
+            android:elevation="@dimen/cardview_default_elevation"
+            android:padding="16dp"
+            android:textAllCaps="false"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/btnGoalEdit"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:rippleColor="@color/main_color_1"
+            app:strokeColor="@color/main_color_1" />
+
+        <TextView
+            android:id="@+id/lblGoalName"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textSize="20sp"
+            android:textColor="@color/main_color_1"
+            android:gravity="top|center_horizontal"
+            android:paddingTop="8dp"
+            android:text="My Goal 1"
+            android:translationZ="10dp" />
+
+        <TextView
+            android:id="@+id/lblGoalSteps"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textSize="12sp"
+            android:textColor="@color/main_color_2"
+            android:gravity="bottom|center_horizontal"
+            android:paddingBottom="10dp"
+            android:text="Steps: 5000"
+            android:translationZ="10dp" />
+
+    </FrameLayout>
+
+    <Button
+        android:id="@+id/btnGoalEdit"
+        style="@style/Widget.Material3.Button.OutlinedButton"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="64dp"
         android:layout_marginEnd="16dp"
+        android:backgroundTint="@color/white"
+        android:clickable="true"
+        android:elevation="@dimen/cardview_default_elevation"
+        android:focusable="true"
+        android:text="Edit"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:rippleColor="@color/main_color_1"
+        app:strokeColor="@color/main_color_1" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
