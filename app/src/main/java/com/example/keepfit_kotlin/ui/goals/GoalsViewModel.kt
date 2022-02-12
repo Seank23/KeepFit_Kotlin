@@ -19,10 +19,16 @@ class GoalsViewModel(application: Application) : AndroidViewModel(application) {
     val getGoals: LiveData<List<Goal>>
     private val repository: GoalRepository
 
+    private var activeGoal: Goal
+    private var prevActiveGoal: Goal
+
+
     init {
         val goalDao = GoalDatabase.getDatabase(application).goalDao()
         repository = GoalRepository(goalDao)
         getGoals = repository.getGoals
+        activeGoal = Goal(-1, "", 0, false)
+        prevActiveGoal = Goal(-1, "", 0, false)
     }
 
     fun getGoalCount() = if(getGoals.value != null) getGoals.value?.size else 0
@@ -41,9 +47,32 @@ class GoalsViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    fun setActive(name: String) {
+    fun setActive(goal: Goal) {
 
+        var goalActive: Goal = goal
+        var goalInactive: Goal = goal
+
+        for(g in getGoals.value!!) {
+            val temp = g.isActive
+            g.isActive = g == goal
+
+            if(temp && !g.isActive)
+                goalInactive = g
+        }
+        updateGoal(goalActive)
+        updateGoal(goalInactive)
+        activeGoal = goalActive
+        prevActiveGoal = goalInactive
     }
+
+    fun getActiveGoal(): Goal {
+
+        if(activeGoal.id == -1)
+            activeGoal = getGoals.value!!.find { goal -> goal.isActive }!!
+        return activeGoal
+    }
+
+    fun getPrevActiveGoal() = prevActiveGoal
 }
 
 class LinearLayoutManagerWrapper(context: Context): LinearLayoutManager(context) {

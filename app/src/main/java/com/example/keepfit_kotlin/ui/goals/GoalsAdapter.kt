@@ -3,6 +3,8 @@ package com.example.keepfit_kotlin.ui.goals
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.example.keepfit_kotlin.R
 import com.example.keepfit_kotlin.data.Goal
@@ -25,8 +27,34 @@ class GoalsAdapter(parentFragment: GoalsFragment) : RecyclerView.Adapter<GoalsAd
             lblGoalName.text = goalsList[position].name
             lblGoalSteps.text = "Steps: " + goalsList[position].steps.toString()
 
+            if(goalsList[position] == p.getActiveGoal()) {
+
+                btnGoal.setBackgroundColor(ContextCompat.getColor(context, R.color.main_color_1))
+                lblGoalName.setTextColor(ContextCompat.getColor(context, R.color.white))
+                lblGoalSteps.setTextColor(ContextCompat.getColor(context, R.color.white))
+                btnGoalEdit.setBackgroundColor(ContextCompat.getColor(context, R.color.main_color_1))
+                btnGoalEdit.setTextColor(ContextCompat.getColor(context, R.color.white))
+                btnGoalEdit.text = ""
+                imgActiveIcon.translationZ = 10F
+            } else if(goalsList[position] == p.getPrevActiveGoal()) {
+
+                btnGoal.setBackgroundColor(ContextCompat.getColor(context, R.color.white))
+                lblGoalName.setTextColor(ContextCompat.getColor(context, R.color.main_color_1))
+                lblGoalSteps.setTextColor(ContextCompat.getColor(context, R.color.main_color_2))
+                btnGoalEdit.setBackgroundColor(ContextCompat.getColor(context, R.color.white))
+                btnGoalEdit.setTextColor(ContextCompat.getColor(context, R.color.main_color_1))
+                btnGoalEdit.text = "Edit"
+                imgActiveIcon.translationZ = 0F
+            }
+
             btnGoalEdit.setOnClickListener {
-                p.onNavEditGoal(goalsList[position])
+                if(!goalsList[position].isActive)
+                    p.onNavEditGoal(goalsList[position])
+            }
+
+            btnGoal.setOnClickListener {
+                if(!goalsList[position].isActive)
+                    p.onSetActive(goalsList[position])
             }
         }
     }
@@ -39,4 +67,5 @@ class GoalsAdapter(parentFragment: GoalsFragment) : RecyclerView.Adapter<GoalsAd
         goalsList = goals
         notifyDataSetChanged()
     }
+
 }

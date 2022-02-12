@@ -8,18 +8,19 @@
     android:id="@+id/goalItem">
 
     <FrameLayout
+        android:id="@+id/flBtnGoal"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginEnd="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/btnGoalEdit"
+        app:layout_constraintEnd_toStartOf="@+id/flBtnGoalEdit"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <Button
-            android:id="@+id/tbtnGoal"
+            android:id="@+id/btnGoal"
             style="@style/Widget.Material3.Button.OutlinedButton"
             android:layout_width="match_parent"
             android:layout_height="64dp"
@@ -60,23 +61,45 @@
 
     </FrameLayout>
 
-    <Button
-        android:id="@+id/btnGoalEdit"
-        style="@style/Widget.Material3.Button.OutlinedButton"
+    <FrameLayout
+        android:id="@+id/flBtnGoalEdit"
         android:layout_width="wrap_content"
-        android:layout_height="64dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:layout_marginEnd="16dp"
-        android:backgroundTint="@color/white"
-        android:clickable="true"
-        android:elevation="@dimen/cardview_default_elevation"
-        android:focusable="true"
-        android:text="Edit"
-        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:rippleColor="@color/main_color_1"
-        app:strokeColor="@color/main_color_1" />
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/flBtnGoal"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <Button
+            android:id="@+id/btnGoalEdit"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:layout_width="88dp"
+            android:layout_height="64dp"
+            android:backgroundTint="@color/white"
+            android:clickable="true"
+            android:elevation="@dimen/cardview_default_elevation"
+            android:focusable="true"
+            android:text="Edit"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:rippleColor="@color/main_color_1"
+            app:strokeColor="@color/main_color_1" />
+
+        <ImageView
+            android:id="@+id/imgActiveIcon"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_tick"
+            app:tint="@color/white" />
+
+    </FrameLayout>
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -37,6 +37,10 @@ class GoalsFragment : Fragment(R.layout.fragment_goals) {
         Toast.makeText(requireContext(), "Goal updated", Toast.LENGTH_SHORT).show()
     }
 
+    fun onSetActive(goal: Goal) {
+        viewModel.setActive(goal)
+    }
+
     fun onNavBack() {
         setCurrentFragment(fragments[0]!!, R.id.flGoals)
     }
@@ -49,6 +53,10 @@ class GoalsFragment : Fragment(R.layout.fragment_goals) {
         (fragments[2] as EditGoalFragment).currentGoal = goal
         setCurrentFragment(fragments[2]!!, R.id.flGoals)
     }
+
+    fun getActiveGoal() = viewModel.getActiveGoal()
+
+    fun getPrevActiveGoal() = viewModel.getPrevActiveGoal()
 
     private fun setCurrentFragment(fragment: Fragment, frameLayout: Int) =
         childFragmentManager.beginTransaction().apply {
