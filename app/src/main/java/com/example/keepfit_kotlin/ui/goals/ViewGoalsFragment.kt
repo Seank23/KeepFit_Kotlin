@@ -33,8 +33,6 @@ class ViewGoalsFragment(goalsAdapter: GoalsAdapter) : Fragment() {
         }
 
         // Setup recycler and adapter
-        //val adapter = GoalsAdapter()
-        //val recycler = view?.findViewById<RecyclerView>(R.id.rvGoals)
         rvGoals?.adapter = adapter
         rvGoals?.layoutManager = LinearLayoutManagerWrapper(this.requireContext())
 

@@ -9,15 +9,16 @@ import android.view.ViewGroup
 import android.widget.Toast
 import com.example.keepfit_kotlin.R
 import com.example.keepfit_kotlin.data.Goal
-import kotlinx.android.synthetic.main.fragment_add_goal.*
+import kotlinx.android.synthetic.main.fragment_edit_goal.*
 
-class AddGoalFragment : Fragment() {
+class EditGoalFragment : Fragment() {
 
     private lateinit var p: GoalsFragment
+    var currentGoal: Goal = Goal(0, "", 0, false)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.fragment_add_goal, container, false)
+        val view = inflater.inflate(R.layout.fragment_edit_goal, container, false)
 
         p = parentFragment as GoalsFragment
 
@@ -27,8 +28,8 @@ class AddGoalFragment : Fragment() {
     override fun onStart() {
         super.onStart()
 
-        btnAdd.setOnClickListener {
-            sendToDB()
+        btnSaveEdit.setOnClickListener {
+            updateGoal()
         }
 
         ibtnBack.setOnClickListener {
@@ -36,16 +37,23 @@ class AddGoalFragment : Fragment() {
         }
     }
 
-    private fun sendToDB() {
+    override fun onResume() {
+        super.onResume()
 
-        val goalName = txtGoalName.text.toString()
-        val targetSteps = safeInt(txtTargetSteps.text.toString(), 0)
+        txtEditGoalName.setText(currentGoal.name)
+        txtEditTargetSteps.setText(currentGoal.steps.toString())
+    }
+
+    private fun updateGoal() {
+
+        val goalName = txtEditGoalName.text.toString()
+        val targetSteps = safeInt(txtEditTargetSteps.text.toString(), 0)
 
         if(checkInput(goalName, targetSteps)) {
-            val newGoal = Goal(0, goalName, targetSteps, false)
-            p.onGoalAdded(newGoal)
+            val updatedGoal = Goal(currentGoal.id, goalName, targetSteps, false)
+            p.onGoalUpdated(updatedGoal)
         } else {
-            Toast.makeText(requireContext(), "Goal could not be created, please try again...", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "Goal could not be edited, please try again...", Toast.LENGTH_SHORT).show()
         }
     }
 

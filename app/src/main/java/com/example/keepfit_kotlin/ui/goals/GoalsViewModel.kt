@@ -34,6 +34,13 @@ class GoalsViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
+    fun updateGoal(goal: Goal) {
+
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.updateGoal(goal)
+        }
+    }
+
     fun setActive(name: String) {
 
     }

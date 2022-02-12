@@ -3,14 +3,15 @@ package com.example.keepfit_kotlin.ui.goals
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.keepfit_kotlin.R
 import com.example.keepfit_kotlin.data.Goal
+import kotlinx.android.synthetic.main.item_goal.view.*
 
-class GoalsAdapter : RecyclerView.Adapter<GoalsAdapter.GoalViewHolder>() {
+class GoalsAdapter(parentFragment: GoalsFragment) : RecyclerView.Adapter<GoalsAdapter.GoalViewHolder>() {
 
     private var goalsList = emptyList<Goal>()
+    private val p = parentFragment
 
     inner class GoalViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
@@ -21,9 +22,12 @@ class GoalsAdapter : RecyclerView.Adapter<GoalsAdapter.GoalViewHolder>() {
 
     override fun onBindViewHolder(holder: GoalViewHolder, position: Int) {
         holder.itemView.apply {
-            findViewById<TextView>(R.id.lblGoalName).text = goalsList[position].name
-            findViewById<TextView>(R.id.lblGoalSteps).text = "Steps: " + goalsList[position].steps.toString()
-            //findViewById<CheckBox>(R.id.chbActive).isChecked = goalsList[position].isActive
+            lblGoalName.text = goalsList[position].name
+            lblGoalSteps.text = "Steps: " + goalsList[position].steps.toString()
+
+            btnGoalEdit.setOnClickListener {
+                p.onNavEditGoal(goalsList[position])
+            }
         }
     }
 

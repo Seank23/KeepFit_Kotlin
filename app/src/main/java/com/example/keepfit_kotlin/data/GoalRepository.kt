@@ -9,4 +9,8 @@ class GoalRepository(private val goalDao: GoalDao) {
     suspend fun addGoal(goal: Goal) {
         goalDao.addGoal(goal)
     }
+
+    suspend fun updateGoal(goal: Goal) {
+        goalDao.updateGoal(goal)
+    }
 }
