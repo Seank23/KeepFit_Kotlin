@@ -27,7 +27,7 @@ class GoalsAdapter(parentFragment: GoalsFragment) : RecyclerView.Adapter<GoalsAd
             lblGoalName.text = goalsList[position].name
             lblGoalSteps.text = "Steps: " + goalsList[position].steps.toString()
 
-            if(goalsList[position] == p.getActiveGoal()) {
+            if(goalsList[position].name == p.getActiveGoal().name) {
 
                 btnGoal.setBackgroundColor(ContextCompat.getColor(context, R.color.main_color_1))
                 lblGoalName.setTextColor(ContextCompat.getColor(context, R.color.white))

@@ -1,5 +1,6 @@
 package com.example.keepfit_kotlin.ui.goals
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.text.TextUtils
 import androidx.fragment.app.Fragment
@@ -28,12 +29,16 @@ class EditGoalFragment : Fragment() {
     override fun onStart() {
         super.onStart()
 
-        btnSaveEdit.setOnClickListener {
+        fbtnSave.setOnClickListener {
             updateGoal()
         }
 
         ibtnBack.setOnClickListener {
             p.onNavBack()
+        }
+
+        fbtnDelete.setOnClickListener {
+            deleteGoal()
         }
     }
 
@@ -50,11 +55,25 @@ class EditGoalFragment : Fragment() {
         val targetSteps = safeInt(txtEditTargetSteps.text.toString(), 0)
 
         if(checkInput(goalName, targetSteps)) {
-            val updatedGoal = Goal(currentGoal.id, goalName, targetSteps, false)
-            p.onGoalUpdated(updatedGoal)
+            if(p.checkGoalNameExists(goalName) && goalName != currentGoal.name) {
+                Toast.makeText(requireContext(), "Goal could not be updated, a goal with this name already exists", Toast.LENGTH_SHORT).show()
+            } else {
+                val updatedGoal = Goal(currentGoal.id, goalName, targetSteps, false)
+                p.onGoalUpdated(updatedGoal)
+            }
         } else {
             Toast.makeText(requireContext(), "Goal could not be edited, please try again...", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    private fun deleteGoal() {
+
+        val dialog = AlertDialog.Builder(requireContext())
+        dialog.setPositiveButton("Yes"){ _, _ -> p.onGoalDeleted(currentGoal) }
+        dialog.setNegativeButton("No"){ _, _ -> }
+        dialog.setTitle("Delete ${currentGoal.name}?")
+        dialog.setMessage("Are you sure you want to delete the goal: ${currentGoal.name}?")
+        dialog.create().show()
     }
 
     private fun checkInput(goalName: String, targetSteps: Int): Boolean {

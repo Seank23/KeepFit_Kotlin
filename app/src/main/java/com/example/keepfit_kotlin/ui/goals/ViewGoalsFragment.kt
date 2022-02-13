@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.example.keepfit_kotlin.R
 import kotlinx.android.synthetic.main.fragment_view_goals.*
@@ -12,7 +13,7 @@ import kotlinx.android.synthetic.main.fragment_view_goals.view.*
 
 class ViewGoalsFragment(goalsAdapter: GoalsAdapter) : Fragment() {
 
-    private val viewModel by viewModels<GoalsViewModel>({ requireParentFragment() })
+    private val viewModel by activityViewModels<GoalsViewModel>()
     private lateinit var p: GoalsFragment
     private var adapter: GoalsAdapter = goalsAdapter
 

@@ -52,7 +52,7 @@
         android:backgroundTint="@color/white"
         android:clickable="true"
         android:focusable="true"
-        android:tint="@color/main_color_1"
+        app:tint="@color/main_color_1"
         app:backgroundTint="@color/main_color_1"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

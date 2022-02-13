@@ -27,7 +27,7 @@ class AddGoalFragment : Fragment() {
     override fun onStart() {
         super.onStart()
 
-        btnAdd.setOnClickListener {
+        fbtnAdd.setOnClickListener {
             sendToDB()
         }
 
@@ -42,8 +42,14 @@ class AddGoalFragment : Fragment() {
         val targetSteps = safeInt(txtTargetSteps.text.toString(), 0)
 
         if(checkInput(goalName, targetSteps)) {
-            val newGoal = Goal(0, goalName, targetSteps, false)
-            p.onGoalAdded(newGoal)
+            if(p.checkGoalNameExists(goalName)) {
+                Toast.makeText(requireContext(), "Goal could not be created, a goal with this name already exists", Toast.LENGTH_SHORT).show()
+            } else {
+                val newGoal = Goal(0, goalName, targetSteps, false)
+                p.onGoalAdded(newGoal)
+                txtGoalName.setText("")
+                txtTargetSteps.setText("")
+            }
         } else {
             Toast.makeText(requireContext(), "Goal could not be created, please try again...", Toast.LENGTH_SHORT).show()
         }

@@ -13,6 +13,9 @@ interface GoalDao {
     @Update
     suspend fun updateGoal(goal: Goal)
 
+    @Delete
+    suspend fun deleteGoal(goal: Goal)
+
     @Query("SELECT * FROM goal_data ORDER BY id ASC")
     fun getGoals(): LiveData<List<Goal>>
 }

@@ -2,6 +2,7 @@ package com.example.keepfit_kotlin.ui.goals
 
 import android.app.Application
 import android.content.Context
+import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
@@ -35,6 +36,10 @@ class GoalsViewModel(application: Application) : AndroidViewModel(application) {
 
     fun addGoal(goal: Goal) {
 
+        if(getGoalCount() == 0) {
+            goal.isActive = true
+            activeGoal = goal
+        }
         viewModelScope.launch(Dispatchers.IO) {
             repository.addGoal(goal)
         }
@@ -47,22 +52,32 @@ class GoalsViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
+    fun deleteGoal(goal: Goal) {
+
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.deleteGoal(goal)
+        }
+    }
+
     fun setActive(goal: Goal) {
 
         var goalActive: Goal = goal
-        var goalInactive: Goal = goal
-
-        for(g in getGoals.value!!) {
-            val temp = g.isActive
-            g.isActive = g == goal
-
-            if(temp && !g.isActive)
-                goalInactive = g
-        }
+        goalActive.isActive = true
         updateGoal(goalActive)
-        updateGoal(goalInactive)
-        activeGoal = goalActive
-        prevActiveGoal = goalInactive
+
+        if(getGoalCount()!! > 1) {
+
+            var goalInactive: Goal = activeGoal
+            goalInactive.isActive = false
+            updateGoal(goalInactive)
+            prevActiveGoal = goalInactive
+        }
+        activeGoal = goal
+    }
+
+    fun checkGoalNameExists(name: String): Boolean {
+        val goal = getGoals.value!!.find { goal -> goal.name == name }
+        return goal != null
     }
 
     fun getActiveGoal(): Goal {
