@@ -5,18 +5,24 @@ import android.os.Bundle
 import android.view.Gravity
 import android.view.View
 import android.widget.*
+import androidx.activity.viewModels
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import com.example.keepfit_kotlin.R
 import com.example.keepfit_kotlin.ui.goals.GoalsFragment
+import com.example.keepfit_kotlin.ui.goals.GoalsViewModel
 import com.example.keepfit_kotlin.ui.history.HistoryFragment
 import com.example.keepfit_kotlin.ui.home.HomeFragment
+import com.example.keepfit_kotlin.ui.home.HomeViewModel
 import com.example.keepfit_kotlin.ui.settings.SettingsFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var settingsDrawer : DrawerLayout
+    private val fragments = arrayOfNulls<Fragment>(4)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,25 +37,24 @@ class MainActivity : AppCompatActivity() {
         settingsDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
 
         // Fragments setup
-        val homeFragment = HomeFragment()
-        val goalsFragment = GoalsFragment()
-        val historyFragment = HistoryFragment()
-        val settingsFragment = SettingsFragment()
+        fragments[0] = HomeFragment()
+        fragments[1] = GoalsFragment()
+        fragments[2] = HistoryFragment()
+        fragments[3] = SettingsFragment()
 
-        setCurrentFragment(homeFragment, R.id.flFragment)
-        setCurrentFragment(settingsFragment, R.id.flFragmentSettings)
+        setCurrentFragment(fragments[0]!!, R.id.flFragment)
+        setCurrentFragment(fragments[3]!!, R.id.flFragmentSettings)
 
         // Navigation bar setup
-        val navView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
-        navView.setOnItemSelectedListener {
+        bottomNavigationView.setOnItemSelectedListener {
             when(it.itemId) {
-                R.id.navHome -> setCurrentFragment(homeFragment, R.id.flFragment)
-                R.id.navGoals -> setCurrentFragment(goalsFragment, R.id.flFragment)
-                R.id.navHistory -> setCurrentFragment(historyFragment, R.id.flFragment)
+                R.id.navHome -> setCurrentFragment(fragments[0]!!, R.id.flFragment)
+                R.id.navGoals -> setCurrentFragment(fragments[1]!!, R.id.flFragment)
+                R.id.navHistory -> setCurrentFragment(fragments[2]!!, R.id.flFragment)
             }
             true
         }
-        navView.selectedItemId = R.id.navHome
+        bottomNavigationView.selectedItemId = R.id.navHome
 
         // Settings button event handler
         findViewById<ImageView>(R.id.btnSettings).setOnClickListener {
@@ -65,6 +70,16 @@ class MainActivity : AppCompatActivity() {
         findViewById<ImageView>(R.id.btnCloseDrawer).setOnClickListener {
             settingsDrawer.closeDrawer(Gravity.RIGHT)
         }
+    }
+
+    fun onNavGoals() {
+        setCurrentFragment(fragments[1]!!, R.id.flFragment)
+        bottomNavigationView.selectedItemId = R.id.navGoals
+    }
+
+    fun onNavHistory() {
+        setCurrentFragment(fragments[2]!!, R.id.flFragment)
+        bottomNavigationView.selectedItemId = R.id.navHistory
     }
 
     private fun setCurrentFragment(fragment: Fragment, frameLayout: Int) =

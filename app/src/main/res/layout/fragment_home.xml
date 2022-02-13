@@ -7,7 +7,7 @@
     tools:context=".ui.MainActivity">
 
     <TextView
-        android:id="@+id/lblWelcome"
+        android:id="@+id/lblTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
@@ -21,43 +21,181 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/lblSteps"
+    <FrameLayout
+        android:id="@+id/flStepsTracker"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="64dp"
-        android:text="0 Steps"
-        android:textColor="@color/main_color_1"
-        android:textSize="24sp"
+        android:layout_height="160dp"
+        android:layout_marginTop="32dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lblWelcome" />
+        app:layout_constraintTop_toBottomOf="@+id/lblTitle">
 
-    <EditText
-        android:id="@+id/txtStepsInput"
-        android:layout_width="162dp"
-        android:layout_height="48dp"
-        android:ems="10"
-        android:inputType="numberDecimal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/btnAddSteps"
+        <TextView
+            android:id="@+id/lblSteps"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="0 Steps"
+            android:textColor="@color/main_color_1"
+            android:textSize="24sp" />
+
+    </FrameLayout>
+
+
+    <FrameLayout
+        android:id="@+id/flCurrentGoal"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.323" />
+        app:layout_constraintTop_toBottomOf="@+id/flStepsTracker">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left|center_vertical"
+            android:text="Active Goal"
+            android:textColor="@color/main_color_1"
+            android:textSize="20sp" />
+
+        <FrameLayout
+            android:id="@+id/flBtnGoal"
+            android:layout_width="220dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:background="@drawable/rounded_corners"
+                android:elevation="@dimen/cardview_default_elevation" />
+
+            <TextView
+                android:id="@+id/lblCurGoalName"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textSize="20sp"
+                android:textColor="@color/white"
+                android:gravity="top|center_horizontal"
+                android:paddingTop="5dp"
+                android:text="My Goal 1"
+                android:translationZ="10dp" />
+
+            <TextView
+                android:id="@+id/lblCurGoalSteps"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textSize="12sp"
+                android:textColor="@color/white"
+                android:gravity="bottom|center_horizontal"
+                android:paddingBottom="7dp"
+                android:text="Steps: 5000"
+                android:translationZ="10dp" />
+
+        </FrameLayout>
+
+    </FrameLayout>
 
     <Button
-        android:id="@+id/btnAddSteps"
+        android:id="@+id/btnViewGoals"
+        style="@style/Widget.Material3.Button.OutlinedButton"
+        android:layout_width="350dp"
+        android:layout_height="64dp"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="@color/white"
+        android:clickable="true"
+        android:elevation="@dimen/cardview_default_elevation"
+        android:focusable="true"
+        android:text="View Your Goals"
+        android:textSize="20sp"
+        app:icon="@drawable/ic_action_goals"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/flCurrentGoal"
+        app:rippleColor="@color/main_color_1"
+        app:strokeColor="@color/main_color_1" />
+
+    <FrameLayout
+        android:id="@+id/flHistoryContainer"
         android:layout_width="wrap_content"
+        android:layout_height="160dp"
+        android:layout_marginTop="32dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnViewGoals">
+
+        <TextView
+            android:id="@+id/lblHistory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="History Preview"
+            android:textColor="@color/main_color_1"
+            android:textSize="24sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    </FrameLayout>
+
+    <Button
+        android:id="@+id/btnViewHistory"
+        style="@style/Widget.Material3.Button.OutlinedButton"
+        android:layout_width="350dp"
+        android:layout_height="64dp"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="@color/white"
+        android:clickable="true"
+        android:elevation="@dimen/cardview_default_elevation"
+        android:focusable="true"
+        android:text="Detailed History"
+        android:textSize="20sp"
+        app:icon="@drawable/ic_action_history"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/flHistoryContainer"
+        app:rippleColor="@color/main_color_1"
+        app:strokeColor="@color/main_color_1" />
+
+    <FrameLayout
+        android:id="@+id/flRecordSteps"
+        android:layout_width="350dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:text="Add Steps"
+        android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/txtStepsInput"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.323" />
+        app:layout_constraintStart_toStartOf="parent">
+
+        <EditText
+            android:id="@+id/txtStepsInput"
+            android:layout_width="260dp"
+            android:layout_height="48dp"
+            android:layout_margin="8dp"
+            android:layout_gravity="left|center_vertical"
+            android:ems="10"
+            android:hint="Record Steps"
+            android:inputType="numberDecimal" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fbtnAddSteps"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:layout_gravity="right"
+            android:backgroundTint="@color/white"
+            android:clickable="true"
+            android:focusable="true"
+            app:backgroundTint="@color/main_color_1"
+            app:srcCompat="@drawable/ic_add"
+            app:tint="@color/main_color_1" />
+
+    </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

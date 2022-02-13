@@ -1,29 +1,35 @@
 package com.example.keepfit_kotlin.ui.home
 
-import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import com.example.keepfit_kotlin.R
+import com.example.keepfit_kotlin.Utils.safeInt
+import com.example.keepfit_kotlin.ui.MainActivity
+import kotlinx.android.synthetic.main.fragment_home.*
 
 class HomeFragment : Fragment(R.layout.fragment_home) {
 
-    var numSteps = 0
+    private val viewModel by activityViewModels<HomeViewModel>()
 
     override fun onStart() {
 
         super.onStart()
 
-        val btnAddSteps = view?.findViewById<Button>(R.id.btnAddSteps)
+        btnViewGoals.setOnClickListener {
+            (activity as MainActivity).onNavGoals()
+        }
 
-        btnAddSteps?.setOnClickListener {
+        btnViewHistory.setOnClickListener {
+            (activity as MainActivity).onNavHistory()
+        }
 
+        fbtnAddSteps.setOnClickListener {
+
+            viewModel.addSteps(safeInt(txtStepsInput.text.toString(), 0))
+            lblSteps.text = "${viewModel.getSteps()} steps"
+            txtStepsInput.setText("")
             Toast.makeText(this.context, "Steps added successfully!", Toast.LENGTH_SHORT).show()
-            val stepsInput = view?.findViewById<EditText>(R.id.txtStepsInput)
-            numSteps += stepsInput?.text.toString().toInt()
-            view?.findViewById<TextView>(R.id.lblSteps)?.text = "$numSteps steps"
-            stepsInput?.setText("")
         }
     }
 
@@ -31,6 +37,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
         super.onResume()
 
-        view?.findViewById<TextView>(R.id.lblSteps)?.text = "$numSteps steps"
+        lblSteps.text = "${viewModel.getSteps()} steps"
     }
 }

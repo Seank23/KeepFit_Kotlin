@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.example.keepfit_kotlin.R
+import com.example.keepfit_kotlin.Utils.safeInt
 import com.example.keepfit_kotlin.data.Goal
 import kotlinx.android.synthetic.main.fragment_edit_goal.*
 
@@ -78,9 +79,5 @@ class EditGoalFragment : Fragment() {
 
     private fun checkInput(goalName: String, targetSteps: Int): Boolean {
         return !(TextUtils.isEmpty(goalName) || targetSteps <= 0)
-    }
-
-    private fun safeInt(text: String, fallback: Int): Int {
-        return text.toIntOrNull() ?: fallback
     }
 }
