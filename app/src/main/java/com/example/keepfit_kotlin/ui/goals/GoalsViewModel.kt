@@ -2,12 +2,12 @@ package com.example.keepfit_kotlin.ui.goals
 
 import android.app.Application
 import android.content.Context
-import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.keepfit_kotlin.SharedData
 import com.example.keepfit_kotlin.data.Goal
 import com.example.keepfit_kotlin.data.GoalDatabase
 import com.example.keepfit_kotlin.data.GoalRepository
@@ -15,8 +15,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.lang.IndexOutOfBoundsException
 
-class GoalsViewModel(application: Application) : AndroidViewModel(application) {
+class GoalsViewModel(application: Application, sharedData: SharedData) : AndroidViewModel(application) {
 
+    private val mSharedData = sharedData
     val getGoals: LiveData<List<Goal>>
     private val repository: GoalRepository
 
@@ -32,6 +33,10 @@ class GoalsViewModel(application: Application) : AndroidViewModel(application) {
         prevActiveGoal = Goal(-1, "", 0, false)
     }
 
+    fun initSharedData() {
+        mSharedData.activeGoal = getActiveGoal()
+    }
+
     fun getGoalCount() = if(getGoals.value != null) getGoals.value?.size else 0
 
     fun addGoal(goal: Goal) {
@@ -39,6 +44,7 @@ class GoalsViewModel(application: Application) : AndroidViewModel(application) {
         if(getGoalCount() == 0) {
             goal.isActive = true
             activeGoal = goal
+            mSharedData.activeGoal = activeGoal
         }
         viewModelScope.launch(Dispatchers.IO) {
             repository.addGoal(goal)
@@ -73,16 +79,18 @@ class GoalsViewModel(application: Application) : AndroidViewModel(application) {
             prevActiveGoal = goalInactive
         }
         activeGoal = goal
+        mSharedData.activeGoal = activeGoal
     }
 
     fun checkGoalNameExists(name: String): Boolean {
+
         val goal = getGoals.value!!.find { goal -> goal.name == name }
         return goal != null
     }
 
     fun getActiveGoal(): Goal {
 
-        if(activeGoal.id == -1)
+        if(activeGoal.id == -1 && getGoals.value != null)
             activeGoal = getGoals.value!!.find { goal -> goal.isActive }!!
         return activeGoal
     }

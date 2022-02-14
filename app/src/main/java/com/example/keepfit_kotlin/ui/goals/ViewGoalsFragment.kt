@@ -8,14 +8,14 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.example.keepfit_kotlin.R
+import com.example.keepfit_kotlin.SharedData
 import kotlinx.android.synthetic.main.fragment_view_goals.*
 import kotlinx.android.synthetic.main.fragment_view_goals.view.*
 
 class ViewGoalsFragment(goalsAdapter: GoalsAdapter) : Fragment() {
 
-    private val viewModel by activityViewModels<GoalsViewModel>()
     private lateinit var p: GoalsFragment
-    private var adapter: GoalsAdapter = goalsAdapter
+    private val adapter: GoalsAdapter = goalsAdapter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
@@ -36,7 +36,6 @@ class ViewGoalsFragment(goalsAdapter: GoalsAdapter) : Fragment() {
         // Setup recycler and adapter
         rvGoals?.adapter = adapter
         rvGoals?.layoutManager = LinearLayoutManagerWrapper(this.requireContext())
-
-        viewModel.getGoals.observe(viewLifecycleOwner) { goals -> adapter.setData(goals) }
+        p.observeGoalData(viewLifecycleOwner)
     }
 }
