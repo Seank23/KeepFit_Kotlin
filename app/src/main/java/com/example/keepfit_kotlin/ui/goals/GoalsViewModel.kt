@@ -7,34 +7,24 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.keepfit_kotlin.SharedData
 import com.example.keepfit_kotlin.data.Goal
-import com.example.keepfit_kotlin.data.GoalDatabase
-import com.example.keepfit_kotlin.data.GoalRepository
+import com.example.keepfit_kotlin.data.AppRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.lang.IndexOutOfBoundsException
 
-class GoalsViewModel(application: Application, sharedData: SharedData) : AndroidViewModel(application) {
+class GoalsViewModel(application: Application, appRepository: AppRepository) : AndroidViewModel(application) {
 
-    private val mSharedData = sharedData
     val getGoals: LiveData<List<Goal>>
-    private val repository: GoalRepository
+    private val repository = appRepository
 
     private var activeGoal: Goal
     private var prevActiveGoal: Goal
 
-
     init {
-        val goalDao = GoalDatabase.getDatabase(application).goalDao()
-        repository = GoalRepository(goalDao)
         getGoals = repository.getGoals
         activeGoal = Goal(-1, "", 0, false)
         prevActiveGoal = Goal(-1, "", 0, false)
-    }
-
-    fun initSharedData() {
-        mSharedData.activeGoal = getActiveGoal()
     }
 
     fun getGoalCount() = if(getGoals.value != null) getGoals.value?.size else 0
@@ -44,7 +34,6 @@ class GoalsViewModel(application: Application, sharedData: SharedData) : Android
         if(getGoalCount() == 0) {
             goal.isActive = true
             activeGoal = goal
-            mSharedData.activeGoal = activeGoal
         }
         viewModelScope.launch(Dispatchers.IO) {
             repository.addGoal(goal)
@@ -79,7 +68,6 @@ class GoalsViewModel(application: Application, sharedData: SharedData) : Android
             prevActiveGoal = goalInactive
         }
         activeGoal = goal
-        mSharedData.activeGoal = activeGoal
     }
 
     fun checkGoalNameExists(name: String): Boolean {
@@ -90,21 +78,12 @@ class GoalsViewModel(application: Application, sharedData: SharedData) : Android
 
     fun getActiveGoal(): Goal {
 
-        if(activeGoal.id == -1 && getGoals.value != null)
-            activeGoal = getGoals.value!!.find { goal -> goal.isActive }!!
+        if(getGoals.value != null) {
+            if (activeGoal.id == -1 && getGoals.value!!.isNotEmpty())
+                activeGoal = getGoals.value!!.find { goal -> goal.isActive }!!
+        }
         return activeGoal
     }
 
     fun getPrevActiveGoal() = prevActiveGoal
-}
-
-class LinearLayoutManagerWrapper(context: Context): LinearLayoutManager(context) {
-
-    override fun onLayoutChildren(recycler: RecyclerView.Recycler?, state: RecyclerView.State?) {
-        try {
-            super.onLayoutChildren(recycler, state)
-        } catch(e: IndexOutOfBoundsException) {
-            return
-        }
-    }
 }

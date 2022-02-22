@@ -2,30 +2,73 @@ package com.example.keepfit_kotlin.ui.home
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
-import com.example.keepfit_kotlin.SharedData
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.viewModelScope
+import com.example.keepfit_kotlin.data.AppRepository
+import com.example.keepfit_kotlin.data.Goal
+import com.example.keepfit_kotlin.data.Log
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.*
 
-class HomeViewModel(application: Application, sharedData: SharedData) : AndroidViewModel(application) {
+class HomeViewModel(application: Application, appRepository: AppRepository) : AndroidViewModel(application) {
 
-    private val mSharedData = sharedData
-    private var numSteps = 0
+    private val repository = appRepository
+    val getLogs: LiveData<List<Log>> = repository.getLogs
+    val getGoals: LiveData<List<Goal>> = repository.getGoals
 
-    fun addSteps(steps: Int) {
-        numSteps += steps
+
+    private fun addLog(log: Log) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.addLog(log)
+        }
     }
 
-    fun getSteps() = numSteps
+    fun deleteLog(log: Log) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.deleteLog(log)
+        }
+    }
+
+    fun addSteps(steps: Int) {
+        val log = Log(0, SimpleDateFormat("ddMMyyyy").format(Date()), SimpleDateFormat("HH:mm").format(Date()), steps)
+        addLog(log)
+    }
+
+    fun getSteps(): Int {
+        var steps = 0
+        if(getLogs.value != null) {
+            for (log in getLogs.value!!) {
+                steps += log.steps
+            }
+        }
+        return steps
+    }
+
+    private fun getActiveGoal(): Goal? {
+
+        if(getGoals.value != null) {
+            if (getGoals.value!!.isNotEmpty())
+                return getGoals.value!!.find { goal -> goal.isActive }!!
+        }
+        return null
+    }
 
     fun getActiveGoalName(): String {
-        val goal = mSharedData.activeGoal
+        val goal = getActiveGoal()
         return goal?.name ?: "None"
     }
 
     fun getActiveGoalSteps(): Int {
-        val goal = mSharedData.activeGoal
+        val goal = getActiveGoal()
         return goal?.steps ?: 0
     }
 
     fun getGoalProgress(): Float {
-        return numSteps.toFloat() / mSharedData.activeGoal!!.steps
+        return if(getActiveGoal() != null)
+            getSteps().toFloat() / getActiveGoal()!!.steps
+        else
+            0f
     }
 }

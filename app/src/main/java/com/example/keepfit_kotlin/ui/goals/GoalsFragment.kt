@@ -1,36 +1,18 @@
 package com.example.keepfit_kotlin.ui.goals
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.LifecycleOwner
 import com.example.keepfit_kotlin.R
-import com.example.keepfit_kotlin.SharedData
+import com.example.keepfit_kotlin.data.AppRepository
 import com.example.keepfit_kotlin.data.Goal
-import com.example.keepfit_kotlin.ui.MainActivity
 
-class GoalsFragment(sharedData: SharedData) : Fragment(R.layout.fragment_goals) {
+class GoalsFragment(repository: AppRepository) : Fragment(R.layout.fragment_goals) {
 
-    private val viewModel by activityViewModels<GoalsViewModel>{ GoalsViewModelFactory(requireActivity().application, sharedData) }
+    private val viewModel by activityViewModels<GoalsViewModel>{ GoalsViewModelFactory(requireActivity().application, repository) }
     private val fragments = arrayOfNulls<Fragment>(3)
     private lateinit var goalsAdapter: GoalsAdapter
-    private var hasInit: Boolean = false
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-
-        viewModel.getGoals.observe(viewLifecycleOwner) {
-            if(!hasInit) {
-                viewModel.initSharedData()
-                (activity as MainActivity).onNavHome()
-                hasInit = true
-            }
-        }
-        return super.onCreateView(inflater, container, savedInstanceState)
-    }
 
     override fun onStart() {
 

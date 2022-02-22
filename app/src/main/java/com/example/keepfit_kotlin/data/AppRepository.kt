@@ -2,7 +2,7 @@ package com.example.keepfit_kotlin.data
 
 import androidx.lifecycle.LiveData
 
-class GoalRepository(private val goalDao: GoalDao) {
+class AppRepository(private val goalDao: GoalDao, private val logDao: LogDao) {
 
     val getGoals: LiveData<List<Goal>> = goalDao.getGoals()
 
@@ -16,5 +16,15 @@ class GoalRepository(private val goalDao: GoalDao) {
 
     suspend fun deleteGoal(goal: Goal) {
         goalDao.deleteGoal(goal)
+    }
+
+    val getLogs: LiveData<List<Log>> = logDao.getLogs()
+
+    suspend fun addLog(log: Log) {
+        logDao.addLog(log)
+    }
+
+    suspend fun deleteLog(log: Log) {
+        logDao.deleteLog(log)
     }
 }

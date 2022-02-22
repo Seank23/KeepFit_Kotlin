@@ -5,12 +5,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
+import com.example.keepfit_kotlin.LinearLayoutManagerWrapper
 import com.example.keepfit_kotlin.R
-import com.example.keepfit_kotlin.SharedData
 import kotlinx.android.synthetic.main.fragment_view_goals.*
-import kotlinx.android.synthetic.main.fragment_view_goals.view.*
 
 class ViewGoalsFragment(goalsAdapter: GoalsAdapter) : Fragment() {
 
@@ -34,8 +31,8 @@ class ViewGoalsFragment(goalsAdapter: GoalsAdapter) : Fragment() {
         }
 
         // Setup recycler and adapter
-        rvGoals?.adapter = adapter
-        rvGoals?.layoutManager = LinearLayoutManagerWrapper(this.requireContext())
+        rvGoals.adapter = adapter
+        rvGoals.layoutManager = LinearLayoutManagerWrapper(this.requireContext())
         p.observeGoalData(viewLifecycleOwner)
     }
 }

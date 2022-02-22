@@ -66,7 +66,6 @@
             android:layout_gravity="center"
             android:layout_marginTop="45dp"
             android:text="0 Steps"
-            android:shadowColor="@color/main_color_1"
             android:textColor="@color/white"
             android:textSize="24sp" />
 
@@ -97,79 +96,56 @@
             android:layout_height="wrap_content"
             android:layout_gravity="right">
 
-            <ImageView
+            <Button
+                android:id="@+id/btnActiveGoal"
+                style="@style/Widget.Material3.Button.OutlinedButton"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
-                android:background="@drawable/rounded_corners"
-                android:elevation="@dimen/cardview_default_elevation" />
+                app:strokeColor="@color/main_color_1"
+                android:backgroundTint="@color/white"
+                android:elevation="@dimen/cardview_default_elevation"/>
 
             <TextView
                 android:id="@+id/lblCurGoalName"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:textSize="20sp"
-                android:textColor="@color/white"
                 android:gravity="top|center_horizontal"
                 android:paddingTop="5dp"
                 android:text="My Goal 1"
+                android:textColor="@color/main_color_1"
+                android:textSize="20sp"
                 android:translationZ="10dp" />
 
             <TextView
                 android:id="@+id/lblCurGoalSteps"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:textSize="12sp"
-                android:textColor="@color/white"
                 android:gravity="bottom|center_horizontal"
                 android:paddingBottom="7dp"
                 android:text="Steps: 5000"
+                android:textColor="@color/main_color_2"
+                android:textSize="12sp"
                 android:translationZ="10dp" />
 
         </FrameLayout>
 
     </FrameLayout>
 
-    <Button
-        android:id="@+id/btnViewGoals"
-        style="@style/Widget.Material3.Button.OutlinedButton"
-        android:layout_width="350dp"
-        android:layout_height="64dp"
-        android:layout_marginTop="16dp"
-        android:backgroundTint="@color/white"
-        android:clickable="true"
-        android:elevation="@dimen/cardview_default_elevation"
-        android:focusable="true"
-        android:text="View Your Goals"
-        android:textSize="20sp"
-        app:icon="@drawable/ic_action_goals"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/flCurrentGoal"
-        app:rippleColor="@color/main_color_1"
-        app:strokeColor="@color/main_color_1" />
-
     <FrameLayout
         android:id="@+id/flHistoryContainer"
-        android:layout_width="wrap_content"
-        android:layout_height="160dp"
-        android:layout_marginTop="32dp"
+        android:layout_width="340dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/btnViewHistory"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnViewGoals">
+        app:layout_constraintTop_toBottomOf="@+id/lblActivity">
 
-        <TextView
-            android:id="@+id/lblHistory"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="History Preview"
-            android:textColor="@color/main_color_1"
-            android:textSize="24sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvLogs"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
     </FrameLayout>
 
@@ -178,7 +154,7 @@
         style="@style/Widget.Material3.Button.OutlinedButton"
         android:layout_width="350dp"
         android:layout_height="64dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginBottom="10dp"
         android:backgroundTint="@color/white"
         android:clickable="true"
         android:elevation="@dimen/cardview_default_elevation"
@@ -186,10 +162,10 @@
         android:text="Detailed History"
         android:textSize="20sp"
         app:icon="@drawable/ic_action_history"
+        app:layout_constraintBottom_toTopOf="@+id/flRecordSteps"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/flHistoryContainer"
         app:rippleColor="@color/main_color_1"
         app:strokeColor="@color/main_color_1" />
 
@@ -207,8 +183,8 @@
             android:id="@+id/txtStepsInput"
             android:layout_width="260dp"
             android:layout_height="48dp"
-            android:layout_margin="8dp"
             android:layout_gravity="left|center_vertical"
+            android:layout_margin="8dp"
             android:ems="10"
             android:hint="Record Steps"
             android:inputType="numberDecimal" />
@@ -217,8 +193,8 @@
             android:id="@+id/fbtnAddSteps"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp"
             android:layout_gravity="right"
+            android:layout_margin="8dp"
             android:backgroundTint="@color/white"
             android:clickable="true"
             android:focusable="true"
@@ -227,5 +203,21 @@
             app:tint="@color/main_color_1" />
 
     </FrameLayout>
+
+    <TextView
+        android:id="@+id/lblActivity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rounded_corners"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:text="Today's Activity"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:layout_marginTop="32dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/flCurrentGoal" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
