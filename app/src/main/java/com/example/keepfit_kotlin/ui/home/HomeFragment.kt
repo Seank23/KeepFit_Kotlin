@@ -30,7 +30,7 @@ class HomeFragment(repository: AppRepository) : Fragment(R.layout.fragment_home)
             if(!hasInit) {
                 lblCurGoalName.text = viewModel.getActiveGoalName()
                 lblCurGoalSteps.text = "${viewModel.getActiveGoalSteps()} steps"
-                viewModel.getLogs.observe(viewLifecycleOwner) {
+                viewModel.getTodaysLogs.observe(viewLifecycleOwner) {
                     if(!hasInit) {
                         setProgressTracker(viewModel.getSteps(), viewModel.getGoalProgress())
                         hasInit = true
@@ -49,7 +49,7 @@ class HomeFragment(repository: AppRepository) : Fragment(R.layout.fragment_home)
         rvLogs.adapter = logsAdapter
         rvLogs.layoutManager = LinearLayoutManagerWrapper(this.requireContext())
 
-        viewModel.getLogs.observe(viewLifecycleOwner) { logs ->
+        viewModel.getTodaysLogs.observe(viewLifecycleOwner) { logs ->
             logsAdapter.setData(logs)
             setProgressTracker(viewModel.getSteps(), viewModel.getGoalProgress())
         }

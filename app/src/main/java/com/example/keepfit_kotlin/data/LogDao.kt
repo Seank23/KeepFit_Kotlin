@@ -1,7 +1,6 @@
 package com.example.keepfit_kotlin.data
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.room.*
 
 @Dao
@@ -13,6 +12,9 @@ interface LogDao {
     @Delete
     suspend fun deleteLog(log: Log)
 
-    @Query("SELECT * FROM log_data ORDER BY id ASC")
+    @Query("SELECT * FROM log_data ORDER BY time DESC")
     fun getLogs(): LiveData<List<Log>>
+
+    @Query("SELECT * FROM log_data WHERE date = :date ORDER BY time DESC")
+    fun getLogsByDate(date: String): LiveData<List<Log>>
 }

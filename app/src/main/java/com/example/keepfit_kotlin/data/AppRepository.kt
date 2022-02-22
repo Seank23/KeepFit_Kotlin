@@ -20,6 +20,8 @@ class AppRepository(private val goalDao: GoalDao, private val logDao: LogDao) {
 
     val getLogs: LiveData<List<Log>> = logDao.getLogs()
 
+    fun getLogsByDate(date: String): LiveData<List<Log>> = logDao.getLogsByDate(date)
+
     suspend fun addLog(log: Log) {
         logDao.addLog(log)
     }

@@ -15,7 +15,7 @@ import java.util.*
 class HomeViewModel(application: Application, appRepository: AppRepository) : AndroidViewModel(application) {
 
     private val repository = appRepository
-    val getLogs: LiveData<List<Log>> = repository.getLogs
+    val getTodaysLogs: LiveData<List<Log>> = repository.getLogsByDate(SimpleDateFormat("ddMMyyyy").format(Date()))
     val getGoals: LiveData<List<Goal>> = repository.getGoals
 
 
@@ -38,8 +38,8 @@ class HomeViewModel(application: Application, appRepository: AppRepository) : An
 
     fun getSteps(): Int {
         var steps = 0
-        if(getLogs.value != null) {
-            for (log in getLogs.value!!) {
+        if(getTodaysLogs.value != null) {
+            for (log in getTodaysLogs.value!!) {
                 steps += log.steps
             }
         }
