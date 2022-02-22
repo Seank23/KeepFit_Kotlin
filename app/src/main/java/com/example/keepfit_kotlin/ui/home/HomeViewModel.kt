@@ -24,4 +24,8 @@ class HomeViewModel(application: Application, sharedData: SharedData) : AndroidV
         val goal = mSharedData.activeGoal
         return goal?.steps ?: 0
     }
+
+    fun getGoalProgress(): Float {
+        return numSteps.toFloat() / mSharedData.activeGoal!!.steps
+    }
 }

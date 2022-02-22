@@ -1,5 +1,6 @@
 package com.example.keepfit_kotlin.ui.home
 
+import android.animation.ObjectAnimator
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -8,6 +9,7 @@ import com.example.keepfit_kotlin.SharedData
 import com.example.keepfit_kotlin.Utils.safeInt
 import com.example.keepfit_kotlin.ui.MainActivity
 import kotlinx.android.synthetic.main.fragment_home.*
+import java.lang.Math.min
 
 class HomeFragment(sharedData: SharedData) : Fragment(R.layout.fragment_home) {
 
@@ -28,18 +30,25 @@ class HomeFragment(sharedData: SharedData) : Fragment(R.layout.fragment_home) {
         fbtnAddSteps.setOnClickListener {
 
             viewModel.addSteps(safeInt(txtStepsInput.text.toString(), 0))
-            lblSteps.text = "${viewModel.getSteps()} steps"
+            setProgressTracker(viewModel.getSteps(), viewModel.getGoalProgress())
             txtStepsInput.setText("")
-            Toast.makeText(this.context, "Steps added successfully!", Toast.LENGTH_SHORT).show()
+            //Toast.makeText(this.context, "Steps added successfully!", Toast.LENGTH_SHORT).show()
         }
     }
 
     override fun onResume() {
 
         super.onResume()
-
-        lblSteps.text = "${viewModel.getSteps()} steps"
         lblCurGoalName.text = viewModel.getActiveGoalName()
         lblCurGoalSteps.text = "${viewModel.getActiveGoalSteps()} steps"
+        setProgressTracker(viewModel.getSteps(), viewModel.getGoalProgress())
+    }
+
+    private fun setProgressTracker(steps: Int, progress: Float) {
+
+        lblSteps.text = "$steps steps"
+        lblPercent.text = "${kotlin.math.min((progress * 100).toInt(), 100)}%"
+        ObjectAnimator.ofInt(pbCircularTracker, "progress", ((100 * progress) * 0.6667).toInt()).setDuration(500).start()
+        ObjectAnimator.ofInt(pbStepsBar, "progress", (progress * 100).toInt()).setDuration(500).start()
     }
 }

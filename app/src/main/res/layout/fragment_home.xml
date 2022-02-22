@@ -24,20 +24,50 @@
     <FrameLayout
         android:id="@+id/flStepsTracker"
         android:layout_width="wrap_content"
-        android:layout_height="160dp"
-        android:layout_marginTop="32dp"
+        android:layout_height="200dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/lblTitle">
+
+        <ProgressBar
+            android:id="@+id/pbCircularTracker"
+            android:layout_width="300dp"
+            android:layout_height="300dp"
+            android:indeterminateOnly="false"
+            android:progress="34"
+            android:progressDrawable="@drawable/circular_tracker" />
+
+        <TextView
+            android:id="@+id/lblPercent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="50%"
+            android:textColor="@color/main_color_1"
+            android:textSize="24sp" />
+
+        <ProgressBar
+            android:id="@+id/pbStepsBar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="180dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="45dp"
+            android:indeterminate="false"
+            android:indeterminateOnly="false"
+            android:progress="50"
+            android:progressDrawable="@drawable/progress_bar_horiz" />
 
         <TextView
             android:id="@+id/lblSteps"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_marginTop="45dp"
             android:text="0 Steps"
-            android:textColor="@color/main_color_1"
+            android:shadowColor="@color/main_color_1"
+            android:textColor="@color/white"
             android:textSize="24sp" />
 
     </FrameLayout>
