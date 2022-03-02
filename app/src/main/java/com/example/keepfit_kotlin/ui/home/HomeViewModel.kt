@@ -32,7 +32,7 @@ class HomeViewModel(application: Application, appRepository: AppRepository) : An
     }
 
     fun addSteps(steps: Int) {
-        val log = Log(0, SimpleDateFormat("ddMMyyyy").format(Date()), SimpleDateFormat("HH:mm").format(Date()), steps)
+        val log = Log(0, SimpleDateFormat("ddMMyyyy").format(Date()), SimpleDateFormat("HH:mm").format(Date()), steps, getActiveGoalName(), getActiveGoalSteps())
         addLog(log)
     }
 

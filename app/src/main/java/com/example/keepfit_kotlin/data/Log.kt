@@ -10,5 +10,7 @@ data class Log (
     val id: Int,
     var date: String,
     var time: String,
-    var steps: Int
+    var steps: Int,
+    var goalName: String,
+    var goalSteps: Int
 )

@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity() {
         repository = AppRepository(AppDatabase.getDatabase(application).goalDao(), AppDatabase.getDatabase(application).logDao())
         fragments[0] = HomeFragment(repository)
         fragments[1] = GoalsFragment(repository)
-        fragments[2] = HistoryFragment()
+        fragments[2] = HistoryFragment(repository)
         fragments[3] = SettingsFragment()
 
         setCurrentFragment(fragments[0]!!, R.id.flFragment)
