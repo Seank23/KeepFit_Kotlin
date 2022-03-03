@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.keepfit_kotlin.R
+import com.example.keepfit_kotlin.Utils.MONTHS
 import com.example.keepfit_kotlin.Utils.getDateString
 import com.example.keepfit_kotlin.data.HistoryActivity
 import kotlinx.android.synthetic.main.fragment_view_history.*
@@ -17,7 +18,6 @@ import java.util.*
 
 class ViewHistoryFragment : Fragment() {
 
-    val MONTHS = arrayOf("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
     private lateinit var p: HistoryFragment
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -45,6 +45,10 @@ class ViewHistoryFragment : Fragment() {
 
             datePicker.datePicker.maxDate = System.currentTimeMillis()
             datePicker.show()
+        }
+
+        btnEditDay.setOnClickListener {
+            p.onNavEditHistory()
         }
     }
 

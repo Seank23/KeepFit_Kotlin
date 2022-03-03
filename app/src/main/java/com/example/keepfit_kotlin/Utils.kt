@@ -9,6 +9,8 @@ import java.lang.IndexOutOfBoundsException
 
 object Utils {
 
+    val MONTHS = arrayOf("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
+
     fun safeInt(text: String, fallback: Int): Int {
         return text.toIntOrNull() ?: fallback
     }
@@ -22,6 +24,10 @@ object Utils {
             "0${day}${month + 1}$year"
         else
             "${day}${month + 1}$year"
+    }
+
+    fun getFormattedDate(dateStr: String): String {
+        return "${dateStr.substring(0, 2)} ${MONTHS[dateStr.substring(2, 4).toInt() - 1]} ${dateStr.substring(4, 8)}"
     }
 
     fun <T> LiveData<T>.observeForeverOnce(observer: Observer<T>) {

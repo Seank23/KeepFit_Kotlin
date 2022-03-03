@@ -29,6 +29,22 @@ class HistoryFragment(repository: AppRepository) : Fragment(R.layout.fragment_hi
 
     fun getHistoryByDate(date: String, onRetrieve: (HistoryActivity?) -> Unit) = viewModel.getHistoryByDate(date, onRetrieve)
 
+    fun getCurrentHistoryActivity(): HistoryActivity = viewModel.currentHistoryActivity
+
+    fun getGoalNames(): List<String> = viewModel.getGoalNames()
+
+    fun getGoalSteps(): List<Int> = viewModel.getGoalSteps()
+
+    fun editHistory(date: String, additionalSteps: Int, goalIndex: Int) = viewModel.editHistory(date, additionalSteps, goalIndex)
+
+    fun onNavEditHistory() {
+        setCurrentFragment(fragments[1]!!, R.id.flHistory)
+    }
+
+    fun onNavBack() {
+        setCurrentFragment(fragments[0]!!, R.id.flHistory)
+    }
+
     private fun setCurrentFragment(fragment: Fragment, frameLayout: Int) =
         childFragmentManager.beginTransaction().apply {
             replace(frameLayout, fragment)

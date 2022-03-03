@@ -9,6 +9,9 @@ interface LogDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun addLog(log: Log)
 
+    @Update
+    suspend fun updateLog(log: Log)
+
     @Delete
     suspend fun deleteLog(log: Log)
 
