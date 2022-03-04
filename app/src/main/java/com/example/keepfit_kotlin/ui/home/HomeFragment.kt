@@ -63,7 +63,6 @@ class HomeFragment(repository: AppRepository) : Fragment(R.layout.fragment_home)
         }
 
         fbtnAddSteps.setOnClickListener {
-
             viewModel.addSteps(safeInt(txtStepsInput.text.toString(), 0))
             txtStepsInput.setText("")
             //Toast.makeText(this.context, "Steps added successfully!", Toast.LENGTH_SHORT).show()

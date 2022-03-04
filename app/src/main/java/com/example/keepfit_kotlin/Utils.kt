@@ -1,6 +1,9 @@
 package com.example.keepfit_kotlin
 
 import android.content.Context
+import android.view.View
+import android.widget.AdapterView
+import android.widget.Spinner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -37,6 +40,15 @@ object Utils {
                 removeObserver(this)
             }
         })
+    }
+
+    fun Spinner.selected(action: (position:Int) -> Unit) {
+        this.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                action(position)
+            }
+        }
     }
 }
 

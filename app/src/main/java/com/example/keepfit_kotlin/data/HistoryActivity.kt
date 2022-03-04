@@ -5,4 +5,9 @@ data class HistoryActivity(var date: String,
                            var goalName: String,
                            var goalSteps: Int,
                            var goalProgress: Float,
-                           var logs: List<Log>)
+                           var logs: MutableList<Log>) : Cloneable
+{
+    public override fun clone(): Any {
+        return super.clone()
+    }
+}

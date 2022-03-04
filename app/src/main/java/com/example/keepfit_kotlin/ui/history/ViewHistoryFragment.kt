@@ -11,14 +11,18 @@ import android.view.ViewGroup
 import com.example.keepfit_kotlin.R
 import com.example.keepfit_kotlin.Utils.MONTHS
 import com.example.keepfit_kotlin.Utils.getDateString
+import com.example.keepfit_kotlin.Utils.getFormattedDate
 import com.example.keepfit_kotlin.data.HistoryActivity
 import kotlinx.android.synthetic.main.fragment_view_history.*
 import java.text.SimpleDateFormat
+import java.time.Instant
+import java.time.temporal.ChronoUnit
 import java.util.*
 
 class ViewHistoryFragment : Fragment() {
 
     private lateinit var p: HistoryFragment
+    var dateToShow: String = SimpleDateFormat("ddMMyyyy").format(Date(System.currentTimeMillis() - 86400000))
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
@@ -43,7 +47,7 @@ class ViewHistoryFragment : Fragment() {
                 }
             }, year, month, day)
 
-            datePicker.datePicker.maxDate = System.currentTimeMillis()
+            datePicker.datePicker.maxDate = System.currentTimeMillis() - 86400000
             datePicker.show()
         }
 
@@ -55,25 +59,18 @@ class ViewHistoryFragment : Fragment() {
     override fun onResume() {
         super.onResume()
 
-        p.getHistoryByDate(SimpleDateFormat("ddMMyyyy").format(Date())) {
-            btnDatePicker.text = "${SimpleDateFormat("dd").format(Date())} ${MONTHS[SimpleDateFormat("MM").format(Date()).toInt() - 1]} ${SimpleDateFormat("yyyy").format(Date())}"
+        p.getHistoryByDate(dateToShow) {
+            btnDatePicker.text = getFormattedDate(it.date)
             setDailyTracker(it)
         }
     }
 
-    private fun setDailyTracker(dayHistory: HistoryActivity?) {
+    private fun setDailyTracker(dayHistory: HistoryActivity) {
 
-        if(dayHistory != null) {
-            val percentProgress = (dayHistory.goalProgress * 100).toInt()
-            lblTrackerGoalName.text = dayHistory.goalName
-            lblTrackerGoalSteps.text = "${dayHistory.goalSteps} steps"
-            lblTrackerSteps.text = "${dayHistory.totalSteps} ($percentProgress%)"
-            ObjectAnimator.ofInt(pbTrackerStepsBar, "progress", percentProgress).setDuration(500).start()
-        } else {
-            lblTrackerGoalName.text = "None"
-            lblTrackerGoalSteps.text = "0 steps"
-            lblTrackerSteps.text = "0"
-            pbTrackerStepsBar.progress = 0
-        }
+        val percentProgress = (dayHistory.goalProgress * 100).toInt()
+        lblTrackerGoalName.text = dayHistory.goalName
+        lblTrackerGoalSteps.text = "${dayHistory.goalSteps} steps"
+        lblTrackerSteps.text = "${dayHistory.totalSteps} ($percentProgress%)"
+        ObjectAnimator.ofInt(pbTrackerStepsBar, "progress", percentProgress).setDuration(500).start()
     }
 }
