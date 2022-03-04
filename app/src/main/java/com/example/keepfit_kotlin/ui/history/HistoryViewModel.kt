@@ -20,7 +20,7 @@ class HistoryViewModel(application: Application, appRepository: AppRepository) :
 
     private val repository = appRepository
     private val getGoals: LiveData<List<Goal>> = repository.getGoals
-    var currentHistoryActivity: HistoryActivity = HistoryActivity("", 0, "", 0, 0F, emptyList())
+    var currentHistoryActivity: HistoryActivity? = null
 
     fun getHistoryByDate(date: String, onRetrieve: (HistoryActivity?) -> Unit) {
 
@@ -45,10 +45,10 @@ class HistoryViewModel(application: Application, appRepository: AppRepository) :
                         activityLogs
                     )
                     currentHistoryActivity = historyActivity
-                    onRetrieve(historyActivity)
-                } else {
-                    onRetrieve(null)
-                }
+                } else
+                    currentHistoryActivity = null
+
+                onRetrieve(currentHistoryActivity)
             }
         }
     }
@@ -75,11 +75,14 @@ class HistoryViewModel(application: Application, appRepository: AppRepository) :
 
     fun editHistory(date: String, additionalSteps: Int, goalIndex: Int) {
 
-        val currentLogs = currentHistoryActivity.logs
+        if(currentHistoryActivity == null)
+            return
+
+        val currentLogs = currentHistoryActivity?.logs
         val goalNames = getGoalNames()
         val goalSteps = getGoalSteps()
 
-        for(log: Log in currentLogs) {
+        for(log: Log in currentLogs!!) {
             log.goalName = goalNames[goalIndex]
             log.goalSteps = goalSteps[goalIndex]
             viewModelScope.launch(Dispatchers.IO) {
@@ -93,11 +96,13 @@ class HistoryViewModel(application: Application, appRepository: AppRepository) :
                 repository.addLog(newLog)
             }
         }
-        currentHistoryActivity.date = date
-        currentHistoryActivity.totalSteps += additionalSteps
-        currentHistoryActivity.goalName = goalNames[goalIndex]
-        currentHistoryActivity.goalSteps = goalSteps[goalIndex]
-        currentHistoryActivity.goalProgress = currentHistoryActivity.totalSteps.toFloat() / goalSteps[goalIndex]
-        currentHistoryActivity.logs = currentLogs
+        currentHistoryActivity = HistoryActivity(
+            date,
+            additionalSteps,
+            goalNames[goalIndex],
+            goalSteps[goalIndex],
+            currentHistoryActivity?.totalSteps?.toFloat()?.div(goalSteps[goalIndex]) ?: 0F,
+            currentLogs
+        )
     }
 }

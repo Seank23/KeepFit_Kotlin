@@ -29,7 +29,7 @@ class HistoryFragment(repository: AppRepository) : Fragment(R.layout.fragment_hi
 
     fun getHistoryByDate(date: String, onRetrieve: (HistoryActivity?) -> Unit) = viewModel.getHistoryByDate(date, onRetrieve)
 
-    fun getCurrentHistoryActivity(): HistoryActivity = viewModel.currentHistoryActivity
+    fun getCurrentHistoryActivity(): HistoryActivity? = viewModel.currentHistoryActivity
 
     fun getGoalNames(): List<String> = viewModel.getGoalNames()
 
