@@ -1,10 +1,14 @@
 package com.example.keepfit_kotlin.ui.goals
 
+import android.app.AlertDialog
+import android.content.Context
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.LifecycleOwner
+import com.example.keepfit_kotlin.ui.settings.Prefs
 import com.example.keepfit_kotlin.R
+import com.example.keepfit_kotlin.Utils.toBool
 import com.example.keepfit_kotlin.data.AppRepository
 import com.example.keepfit_kotlin.data.Goal
 
@@ -18,6 +22,12 @@ class GoalsFragment(repository: AppRepository) : Fragment(R.layout.fragment_goal
 
         super.onStart()
 
+        val prefs = activity?.getPreferences(Context.MODE_PRIVATE)!!
+        prefs.registerOnSharedPreferenceChangeListener { sharedPreferences, _ ->
+            if(context != null)
+                goalsAdapter.setGoalEditing(Prefs.getPrefs(sharedPreferences, getString(R.string.enable_goal_editing)).toBool)
+        }
+
         goalsAdapter = GoalsAdapter(this)
 
         fragments[0] = ViewGoalsFragment(goalsAdapter)
@@ -25,6 +35,11 @@ class GoalsFragment(repository: AppRepository) : Fragment(R.layout.fragment_goal
         fragments[2] = EditGoalFragment()
 
         setCurrentFragment(fragments[0]!!, R.id.flGoals)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        goalsAdapter.setGoalEditing(Prefs.getPrefs(activity?.getPreferences(Context.MODE_PRIVATE)!!, getString(R.string.enable_goal_editing)).toBool)
     }
 
     fun onGoalAdded(goal: Goal) {
@@ -39,10 +54,14 @@ class GoalsFragment(repository: AppRepository) : Fragment(R.layout.fragment_goal
         Toast.makeText(requireContext(), "Goal updated", Toast.LENGTH_SHORT).show()
     }
 
-    fun onGoalDeleted(goal: Goal) {
-        viewModel.deleteGoal(goal)
-        setCurrentFragment(fragments[0]!!, R.id.flGoals)
-        Toast.makeText(requireContext(), "${goal.name} removed", Toast.LENGTH_SHORT).show()
+    fun deleteGoal(goal: Goal) {
+
+        val dialog = AlertDialog.Builder(requireContext())
+        dialog.setPositiveButton("Yes"){ _, _ -> onGoalDeleted(goal) }
+        dialog.setNegativeButton("No"){ _, _ -> }
+        dialog.setTitle("Delete ${goal.name}?")
+        dialog.setMessage("Are you sure you want to delete the goal: ${goal.name}?")
+        dialog.create().show()
     }
 
     fun onSetActive(goal: Goal) {
@@ -71,6 +90,12 @@ class GoalsFragment(repository: AppRepository) : Fragment(R.layout.fragment_goal
 
     fun observeGoalData(lifecycleOwner: LifecycleOwner) {
         viewModel.getGoals.observe(lifecycleOwner) { goals -> goalsAdapter.setData(goals) }
+    }
+
+    private fun onGoalDeleted(goal: Goal) {
+        viewModel.deleteGoal(goal)
+        setCurrentFragment(fragments[0]!!, R.id.flGoals)
+        Toast.makeText(requireContext(), "${goal.name} removed", Toast.LENGTH_SHORT).show()
     }
 
     private fun setCurrentFragment(fragment: Fragment, frameLayout: Int) =

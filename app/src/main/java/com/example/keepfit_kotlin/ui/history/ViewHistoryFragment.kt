@@ -2,23 +2,25 @@ package com.example.keepfit_kotlin.ui.history
 
 import android.animation.ObjectAnimator
 import android.app.DatePickerDialog
+import android.content.Context
+import android.content.SharedPreferences
 import android.icu.util.Calendar
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
+import com.example.keepfit_kotlin.ui.settings.Prefs
 import com.example.keepfit_kotlin.R
-import com.example.keepfit_kotlin.Utils.MONTHS
 import com.example.keepfit_kotlin.Utils.getDateString
 import com.example.keepfit_kotlin.Utils.getFormattedDate
+import com.example.keepfit_kotlin.Utils.toPx
 import com.example.keepfit_kotlin.data.HistoryActivity
 import com.example.keepfit_kotlin.data.Log
 import com.example.keepfit_kotlin.ui.home.LogsAdapter
 import kotlinx.android.synthetic.main.fragment_view_history.*
 import java.text.SimpleDateFormat
-import java.time.Instant
-import java.time.temporal.ChronoUnit
 import java.util.*
 
 class ViewHistoryFragment(logsAdapter: LogsAdapter) : Fragment() {
@@ -38,6 +40,11 @@ class ViewHistoryFragment(logsAdapter: LogsAdapter) : Fragment() {
 
     override fun onStart() {
         super.onStart()
+
+        val prefs = activity?.getPreferences(Context.MODE_PRIVATE)!!
+        prefs.registerOnSharedPreferenceChangeListener { sharedPreferences, _ ->
+            onPrefsChange(sharedPreferences)
+        }
 
         btnDatePicker.setOnClickListener {
             val c = Calendar.getInstance()
@@ -88,6 +95,8 @@ class ViewHistoryFragment(logsAdapter: LogsAdapter) : Fragment() {
     override fun onResume() {
         super.onResume()
 
+        onPrefsChange(activity?.getPreferences(Context.MODE_PRIVATE)!!)
+
         p.getHistoryByDate(dateToShow) {
             btnDatePicker.text = getFormattedDate(it.date)
             setDailyTracker(it)
@@ -102,5 +111,22 @@ class ViewHistoryFragment(logsAdapter: LogsAdapter) : Fragment() {
         lblTrackerGoalSteps.text = "${dayHistory.goalSteps} steps"
         lblTrackerSteps.text = "${dayHistory.totalSteps} ($percentProgress%)"
         ObjectAnimator.ofInt(pbTrackerStepsBar, "progress", percentProgress).setDuration(500).start()
+    }
+
+    private fun onPrefsChange(prefs: SharedPreferences) {
+
+        if (context != null) {
+            if (Prefs.getPrefs(prefs, getString(R.string.enable_history_editing)) == 1) {
+                btnEditDay.visibility = View.VISIBLE
+                (btnViewActivity.layoutParams as FrameLayout.LayoutParams).width =
+                    170.toPx(requireContext())
+                btnViewActivity.requestLayout()
+            } else {
+                btnEditDay.visibility = View.INVISIBLE
+                (btnViewActivity.layoutParams as FrameLayout.LayoutParams).width =
+                    FrameLayout.LayoutParams.MATCH_PARENT
+                btnViewActivity.requestLayout()
+            }
+        }
     }
 }

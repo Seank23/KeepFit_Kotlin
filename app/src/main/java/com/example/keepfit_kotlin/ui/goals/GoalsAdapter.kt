@@ -12,6 +12,7 @@ import kotlinx.android.synthetic.main.item_goal.view.*
 
 class GoalsAdapter(parentFragment: GoalsFragment) : RecyclerView.Adapter<GoalsAdapter.GoalViewHolder>() {
 
+    private var allowGoalEditing = true
     private var goalsList = emptyList<Goal>()
     private val p = parentFragment
 
@@ -36,6 +37,7 @@ class GoalsAdapter(parentFragment: GoalsFragment) : RecyclerView.Adapter<GoalsAd
                 btnGoalEdit.setTextColor(ContextCompat.getColor(context, R.color.white))
                 btnGoalEdit.text = ""
                 imgActiveIcon.translationZ = 10F
+                imgDeleteIcon.translationZ = 0F
             } else if(goalsList[position] == p.getPrevActiveGoal()) {
 
                 btnGoal.setBackgroundColor(ContextCompat.getColor(context, R.color.white))
@@ -43,13 +45,24 @@ class GoalsAdapter(parentFragment: GoalsFragment) : RecyclerView.Adapter<GoalsAd
                 lblGoalSteps.setTextColor(ContextCompat.getColor(context, R.color.main_color_2))
                 btnGoalEdit.setBackgroundColor(ContextCompat.getColor(context, R.color.white))
                 btnGoalEdit.setTextColor(ContextCompat.getColor(context, R.color.main_color_1))
-                btnGoalEdit.text = "Edit"
                 imgActiveIcon.translationZ = 0F
+                btnGoalEdit.text = "Edit"
             }
 
-            btnGoalEdit.setOnClickListener {
-                if(!goalsList[position].isActive)
-                    p.onNavEditGoal(goalsList[position])
+            if(!goalsList[position].isActive) {
+                if (allowGoalEditing) {
+                    imgDeleteIcon.translationZ = 0F
+                    btnGoalEdit.text = "Edit"
+                    btnGoalEdit.setOnClickListener {
+                        p.onNavEditGoal(goalsList[position])
+                    }
+                } else {
+                    imgDeleteIcon.translationZ = 10F
+                    btnGoalEdit.text = ""
+                    btnGoalEdit.setOnClickListener {
+                        p.deleteGoal(goalsList[position])
+                    }
+                }
             }
 
             btnGoal.setOnClickListener {
@@ -68,4 +81,8 @@ class GoalsAdapter(parentFragment: GoalsFragment) : RecyclerView.Adapter<GoalsAd
         notifyDataSetChanged()
     }
 
+    fun setGoalEditing(enabled: Boolean) {
+        allowGoalEditing = enabled
+        notifyDataSetChanged()
+    }
 }

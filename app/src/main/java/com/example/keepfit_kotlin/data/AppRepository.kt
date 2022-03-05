@@ -33,4 +33,8 @@ class AppRepository(private val goalDao: GoalDao, private val logDao: LogDao) {
     suspend fun deleteLog(log: Log) {
         logDao.deleteLog(log)
     }
+
+    suspend fun deleteAllLogs() {
+        logDao.deleteAllLogs()
+    }
 }

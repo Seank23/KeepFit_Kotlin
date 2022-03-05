@@ -92,12 +92,21 @@
 
         <ImageView
             android:id="@+id/imgActiveIcon"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
             android:layout_gravity="center"
             android:alpha="1"
             android:src="@drawable/ic_tick"
             app:tint="@color/white" />
+
+        <ImageView
+            android:id="@+id/imgDeleteIcon"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_gravity="center"
+            android:alpha="1"
+            android:src="@drawable/ic_delete"
+            app:tint="@color/red" />
 
     </FrameLayout>
 

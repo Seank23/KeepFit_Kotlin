@@ -1,6 +1,7 @@
 package com.example.keepfit_kotlin
 
 import android.content.Context
+import android.util.DisplayMetrics
 import android.view.View
 import android.widget.AdapterView
 import android.widget.Spinner
@@ -32,6 +33,10 @@ object Utils {
     fun getFormattedDate(dateStr: String): String {
         return "${dateStr.substring(0, 2)} ${MONTHS[dateStr.substring(2, 4).toInt() - 1]} ${dateStr.substring(4, 8)}"
     }
+
+    fun Int.toPx(context: Context) = this * context.resources.displayMetrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT
+
+    val Int.toBool: Boolean get() = this == 1
 
     fun <T> LiveData<T>.observeOnceNoLC(observer: Observer<T>) {
         observeForever(object : Observer<T> {

@@ -39,7 +39,7 @@ class EditGoalFragment : Fragment() {
         }
 
         fbtnDelete.setOnClickListener {
-            deleteGoal()
+            p.deleteGoal(currentGoal)
         }
     }
 
@@ -65,16 +65,6 @@ class EditGoalFragment : Fragment() {
         } else {
             Toast.makeText(requireContext(), "Goal could not be edited, please try again...", Toast.LENGTH_SHORT).show()
         }
-    }
-
-    private fun deleteGoal() {
-
-        val dialog = AlertDialog.Builder(requireContext())
-        dialog.setPositiveButton("Yes"){ _, _ -> p.onGoalDeleted(currentGoal) }
-        dialog.setNegativeButton("No"){ _, _ -> }
-        dialog.setTitle("Delete ${currentGoal.name}?")
-        dialog.setMessage("Are you sure you want to delete the goal: ${currentGoal.name}?")
-        dialog.create().show()
     }
 
     private fun checkInput(goalName: String, targetSteps: Int): Boolean {

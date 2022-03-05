@@ -7,6 +7,7 @@
         <item>Dark Theme</item>
     </string-array>
     <string name="empty"></string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="enable_goal_editing">ENABLE_GOAL_EDITING</string>
+    <string name="enable_history_editing">ENABLE_HISTORY_EDITING</string>
+    <string name="theme_mode">THEME_MODE</string>
 </resources>

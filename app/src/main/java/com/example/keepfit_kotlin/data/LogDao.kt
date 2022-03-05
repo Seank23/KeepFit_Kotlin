@@ -15,6 +15,9 @@ interface LogDao {
     @Delete
     suspend fun deleteLog(log: Log)
 
+    @Query("DELETE FROM log_data")
+    suspend fun deleteAllLogs()
+
     @Query("SELECT * FROM log_data ORDER BY time DESC")
     fun getLogs(): LiveData<List<Log>>
 

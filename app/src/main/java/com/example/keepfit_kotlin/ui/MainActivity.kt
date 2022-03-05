@@ -39,7 +39,7 @@ class MainActivity : AppCompatActivity() {
         fragments[0] = HomeFragment(repository)
         fragments[1] = GoalsFragment(repository)
         fragments[2] = HistoryFragment(repository)
-        fragments[3] = SettingsFragment()
+        fragments[3] = SettingsFragment(repository)
 
         setCurrentFragment(fragments[0]!!, R.id.flFragment)
         setCurrentFragment(fragments[3]!!, R.id.flFragmentSettings)
