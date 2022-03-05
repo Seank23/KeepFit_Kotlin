@@ -33,7 +33,7 @@ object Utils {
         return "${dateStr.substring(0, 2)} ${MONTHS[dateStr.substring(2, 4).toInt() - 1]} ${dateStr.substring(4, 8)}"
     }
 
-    fun <T> LiveData<T>.observeForeverOnce(observer: Observer<T>) {
+    fun <T> LiveData<T>.observeOnceNoLC(observer: Observer<T>) {
         observeForever(object : Observer<T> {
             override fun onChanged(t: T?) {
                 observer.onChanged(t)

@@ -27,7 +27,7 @@ class HistoryFragment(repository: AppRepository) : Fragment(R.layout.fragment_hi
 
         logsAdapter = LogsAdapter(this)
 
-        fragments[0] = ViewHistoryFragment()
+        fragments[0] = ViewHistoryFragment(logsAdapter)
         fragments[1] = EditHistoryFragment(logsAdapter)
 
         setCurrentFragment(fragments[0]!!, R.id.flHistory)

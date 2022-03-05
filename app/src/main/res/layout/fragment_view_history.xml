@@ -48,8 +48,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="History Graph"
-            android:textSize="20sp"
-            android:textColor="@color/main_color_1" />
+            android:textColor="@color/main_color_1"
+            android:textSize="20sp" />
 
     </FrameLayout>
 
@@ -57,13 +57,13 @@
         android:id="@+id/lblDailyTracker"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
         android:background="@drawable/rounded_corners"
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
         android:text="Daily Tracker"
         android:textColor="@color/white"
         android:textSize="20sp"
-        android:layout_marginTop="32dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -79,13 +79,13 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/lblDailyTracker">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="left|center_vertical"
-        android:text="Date"
-        android:textColor="@color/main_color_1"
-        android:textSize="20sp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left|center_vertical"
+            android:text="Date"
+            android:textColor="@color/main_color_1"
+            android:textSize="20sp" />
 
         <Button
             android:id="@+id/btnDatePicker"
@@ -182,43 +182,73 @@
             android:layout_height="wrap_content"
             android:layout_gravity="right">
 
-        <ProgressBar
-            android:id="@+id/pbTrackerStepsBar"
-            style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:layout_gravity="center"
-            android:indeterminate="false"
-            android:indeterminateOnly="false"
-            android:progress="50"
-            android:progressDrawable="@drawable/progress_bar_horiz" />
+            <ProgressBar
+                android:id="@+id/pbTrackerStepsBar"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_gravity="center"
+                android:indeterminate="false"
+                android:indeterminateOnly="false"
+                android:progress="50"
+                android:progressDrawable="@drawable/progress_bar_horiz" />
 
-        <TextView
-            android:id="@+id/lblTrackerSteps"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="0 Steps"
-            android:textColor="@color/white"
-            android:textSize="24sp" />
+            <TextView
+                android:id="@+id/lblTrackerSteps"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="0 Steps"
+                android:textColor="@color/white"
+                android:textSize="24sp" />
 
         </FrameLayout>
     </FrameLayout>
 
-    <Button
-        android:id="@+id/btnEditDay"
-        style="@style/Widget.Material3.Button.OutlinedButton"
-        android:layout_width="220dp"
-        android:layout_height="56dp"
-        android:layout_gravity="right"
+    <FrameLayout
+        android:layout_width="350dp"
+        android:layout_height="0dp"
         android:layout_marginTop="24dp"
-        android:layout_marginEnd="32dp"
-        android:backgroundTint="@color/white"
-        android:elevation="@dimen/cardview_default_elevation"
-        android:text="Edit Day"
-        android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/flTrackerSteps"
-        app:strokeColor="@color/main_color_1" />
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/flTrackerSteps">
+
+        <Button
+            android:id="@+id/btnViewActivity"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:layout_width="170dp"
+            android:layout_height="56dp"
+            android:layout_gravity="left"
+            android:backgroundTint="@color/white"
+            android:elevation="@dimen/cardview_default_elevation"
+            android:text="View Logs"
+            android:textSize="20sp"
+            app:strokeColor="@color/main_color_1" />
+
+        <Button
+            android:id="@+id/btnEditDay"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:layout_width="170dp"
+            android:layout_height="56dp"
+            android:layout_gravity="right"
+            android:backgroundTint="@color/white"
+            android:elevation="@dimen/cardview_default_elevation"
+            android:text="Edit Activity"
+            android:textSize="20sp"
+            app:strokeColor="@color/main_color_1" />
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/flDialog"
+        android:layout_width="350dp"
+        android:layout_height="500dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:translationZ="-10dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

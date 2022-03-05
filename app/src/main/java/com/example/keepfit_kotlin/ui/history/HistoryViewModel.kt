@@ -3,15 +3,13 @@ package com.example.keepfit_kotlin.ui.history
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.asFlow
 import androidx.lifecycle.viewModelScope
-import com.example.keepfit_kotlin.Utils.observeForeverOnce
+import com.example.keepfit_kotlin.Utils.observeOnceNoLC
 import com.example.keepfit_kotlin.data.AppRepository
 import com.example.keepfit_kotlin.data.Goal
 import com.example.keepfit_kotlin.data.Log
 import com.example.keepfit_kotlin.data.HistoryActivity
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
@@ -26,8 +24,7 @@ class HistoryViewModel(application: Application, appRepository: AppRepository) :
 
         lateinit var activityLogs: List<Log>
 
-        viewModelScope.launch {
-            repository.getLogsByDate(date).observeForeverOnce {
+            repository.getLogsByDate(date).observeOnceNoLC {
                 activityLogs = it
 
                 if (activityLogs.isNotEmpty()) {
@@ -50,7 +47,6 @@ class HistoryViewModel(application: Application, appRepository: AppRepository) :
 
                 onRetrieve(currentHistoryActivity)
             }
-        }
     }
 
     fun getGoalNames(): List<String> {

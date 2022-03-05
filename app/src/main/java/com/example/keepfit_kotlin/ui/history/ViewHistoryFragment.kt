@@ -13,16 +13,21 @@ import com.example.keepfit_kotlin.Utils.MONTHS
 import com.example.keepfit_kotlin.Utils.getDateString
 import com.example.keepfit_kotlin.Utils.getFormattedDate
 import com.example.keepfit_kotlin.data.HistoryActivity
+import com.example.keepfit_kotlin.data.Log
+import com.example.keepfit_kotlin.ui.home.LogsAdapter
 import kotlinx.android.synthetic.main.fragment_view_history.*
 import java.text.SimpleDateFormat
 import java.time.Instant
 import java.time.temporal.ChronoUnit
 import java.util.*
 
-class ViewHistoryFragment : Fragment() {
+class ViewHistoryFragment(logsAdapter: LogsAdapter) : Fragment() {
 
     private lateinit var p: HistoryFragment
+    private val adapter = logsAdapter
     var dateToShow: String = SimpleDateFormat("ddMMyyyy").format(Date(System.currentTimeMillis() - 86400000))
+    private lateinit var logsList: List<Log>
+    private var showLogs = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
@@ -42,7 +47,8 @@ class ViewHistoryFragment : Fragment() {
 
             val datePicker = DatePickerDialog(requireContext(), { _, year, month, day ->
                 p.getHistoryByDate(getDateString(year, month, day)) {
-                    btnDatePicker.text = "$day ${MONTHS[month]} $year"
+                    dateToShow = getDateString(year, month, day)
+                    btnDatePicker.text = getFormattedDate(dateToShow)
                     setDailyTracker(it)
                 }
             }, year, month, day)
@@ -53,6 +59,29 @@ class ViewHistoryFragment : Fragment() {
 
         btnEditDay.setOnClickListener {
             p.onNavEditHistory()
+        }
+
+        btnViewActivity.setOnClickListener {
+
+            if(!showLogs) {
+                adapter.readOnly = true
+                val activityDialog = ViewHistoryDialogFragment(adapter, logsList, getFormattedDate(dateToShow))
+                childFragmentManager.beginTransaction().apply {
+                    replace(R.id.flDialog, activityDialog)
+                    commit()
+                }
+                flDialog.translationZ = 10f
+                flDialog.visibility = View.VISIBLE
+                btnViewActivity.text = "View Stats"
+                showLogs = true
+            } else {
+                adapter.readOnly = false
+                flDialog.translationZ = -10f
+                flDialog.visibility = View.INVISIBLE
+                btnViewActivity.text = "View Logs"
+                showLogs = false
+            }
+
         }
     }
 
@@ -67,6 +96,7 @@ class ViewHistoryFragment : Fragment() {
 
     private fun setDailyTracker(dayHistory: HistoryActivity) {
 
+        logsList = dayHistory.logs
         val percentProgress = (dayHistory.goalProgress * 100).toInt()
         lblTrackerGoalName.text = dayHistory.goalName
         lblTrackerGoalSteps.text = "${dayHistory.goalSteps} steps"

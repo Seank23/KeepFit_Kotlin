@@ -14,24 +14,38 @@ class LogsAdapter(parentFragment: Fragment) : RecyclerView.Adapter<LogsAdapter.L
 
     private var logList = emptyList<Log>()
     private val p = parentFragment
+    var readOnly = false
 
     inner class LogViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LogViewHolder {
-        val inflater = LayoutInflater.from(parent.context).inflate(R.layout.item_log, parent, false)
-        return LogViewHolder(inflater)
+
+        return LogViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_log, parent, false))
     }
 
     override fun onBindViewHolder(holder: LogViewHolder, position: Int) {
         holder.itemView.apply {
-            lblLogTime.text = logList[position].time
-            lblLogSteps.text = "${logList[position].steps} steps"
 
-            ibtnDelete.setOnClickListener {
-                if(p.javaClass.typeName == "com.example.keepfit_kotlin.ui.home.HomeFragment")
-                    (p as HomeFragment).onDeleteLog(logList[position])
-                else if(p.javaClass.typeName == "com.example.keepfit_kotlin.ui.history.HistoryFragment")
-                    (p as HistoryFragment).onDeleteLog(position)
+            if(logList[position].date == "") {
+                lblLogSteps.text = "No steps recorded"
+                lblLogTime.visibility = View.INVISIBLE
+                ibtnDelete.visibility = View.INVISIBLE
+            } else {
+                lblLogTime.text = logList[position].time
+                lblLogSteps.text = "${logList[position].steps} steps"
+                lblLogTime.visibility = View.VISIBLE
+                ibtnDelete.visibility = View.VISIBLE
+            }
+
+            if(readOnly) {
+                ibtnDelete.visibility = View.INVISIBLE
+            } else {
+                ibtnDelete.setOnClickListener {
+                    if(p.javaClass.typeName == "com.example.keepfit_kotlin.ui.home.HomeFragment")
+                        (p as HomeFragment).onDeleteLog(logList[position])
+                    else if(p.javaClass.typeName == "com.example.keepfit_kotlin.ui.history.HistoryFragment")
+                        (p as HistoryFragment).onDeleteLog(position)
+                }
             }
         }
     }
@@ -41,7 +55,7 @@ class LogsAdapter(parentFragment: Fragment) : RecyclerView.Adapter<LogsAdapter.L
     }
 
     fun setData(logs: List<Log>) {
-        logList = logs
+        logList = logs.ifEmpty { listOf(Log(0, "", "", 0, "", 0)) }
         notifyDataSetChanged()
     }
 
