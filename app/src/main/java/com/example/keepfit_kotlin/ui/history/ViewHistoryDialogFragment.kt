@@ -14,11 +14,9 @@ import kotlinx.android.synthetic.main.fragment_edit_history.*
 import kotlinx.android.synthetic.main.fragment_edit_history.rvLogs
 import kotlinx.android.synthetic.main.fragment_view_history_dialog.*
 
-class ViewHistoryDialogFragment(logsAdapter: LogsAdapter, logsList: List<Log>, date: String): DialogFragment() {
+class ViewHistoryDialogFragment(logsAdapter: LogsAdapter): DialogFragment() {
 
     private val adapter = logsAdapter
-    private val logs = logsList
-    private val date = date
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_view_history_dialog, container, false)
@@ -27,9 +25,12 @@ class ViewHistoryDialogFragment(logsAdapter: LogsAdapter, logsList: List<Log>, d
     override fun onStart() {
         super.onStart()
 
-        lblActivityDate.text = date
         rvLogs.adapter = adapter
         rvLogs.layoutManager = LinearLayoutManagerWrapper(this.requireContext())
+    }
+
+    fun setData(date: String, logs: List<Log>) {
+        lblActivityDate.text = date
         adapter.setData(logs)
     }
 }

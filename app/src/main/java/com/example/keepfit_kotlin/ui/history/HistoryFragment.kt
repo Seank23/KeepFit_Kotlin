@@ -2,19 +2,10 @@ package com.example.keepfit_kotlin.ui.history
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.LifecycleOwner
 import com.example.keepfit_kotlin.R
 import com.example.keepfit_kotlin.data.AppRepository
 import com.example.keepfit_kotlin.data.HistoryActivity
-import com.example.keepfit_kotlin.data.Log
-import com.example.keepfit_kotlin.ui.goals.AddGoalFragment
-import com.example.keepfit_kotlin.ui.goals.EditGoalFragment
-import com.example.keepfit_kotlin.ui.goals.GoalsAdapter
-import com.example.keepfit_kotlin.ui.goals.ViewGoalsFragment
-import com.example.keepfit_kotlin.ui.home.HomeViewModel
-import com.example.keepfit_kotlin.ui.home.HomeViewModelFactory
 import com.example.keepfit_kotlin.ui.home.LogsAdapter
-import java.text.SimpleDateFormat
 import java.util.*
 
 class HistoryFragment(repository: AppRepository) : Fragment(R.layout.fragment_history) {
@@ -43,7 +34,7 @@ class HistoryFragment(repository: AppRepository) : Fragment(R.layout.fragment_hi
 
     fun getGoalSteps(): List<Int> = viewModel.getGoalSteps()
 
-    fun editHistory(editedHistoryActivity: HistoryActivity) = viewModel.editHistory(editedHistoryActivity)
+    fun saveHistory(editedHistoryActivity: HistoryActivity) = viewModel.saveHistory(editedHistoryActivity)
 
     fun onNavEditHistory() {
         setCurrentFragment(fragments[1]!!, R.id.flHistory)

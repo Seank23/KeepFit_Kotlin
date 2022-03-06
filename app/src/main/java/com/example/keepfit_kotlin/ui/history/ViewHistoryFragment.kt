@@ -37,6 +37,7 @@ import java.util.*
 class ViewHistoryFragment(logsAdapter: LogsAdapter) : Fragment() {
 
     private lateinit var p: HistoryFragment
+    private lateinit var logsDialog: ViewHistoryDialogFragment
     private val adapter = logsAdapter
     var dateToShow: String = SimpleDateFormat("ddMMyyyy").format(Date(System.currentTimeMillis() - 86400000)) // Yesterday
     private lateinit var logsList: List<Log>
@@ -78,6 +79,14 @@ class ViewHistoryFragment(logsAdapter: LogsAdapter) : Fragment() {
             datePicker.show()
         }
 
+        logsDialog = ViewHistoryDialogFragment(adapter)
+        childFragmentManager.beginTransaction().apply {
+            replace(R.id.flDialog, logsDialog)
+            commit()
+        }
+        flDialog.translationZ = -10f
+        flDialog.visibility = View.INVISIBLE
+
         btnEditDay.setOnClickListener {
             p.onNavEditHistory()
         }
@@ -86,11 +95,7 @@ class ViewHistoryFragment(logsAdapter: LogsAdapter) : Fragment() {
 
             if(!showLogs) {
                 adapter.readOnly = true
-                val activityDialog = ViewHistoryDialogFragment(adapter, logsList, getFormattedDate(dateToShow))
-                childFragmentManager.beginTransaction().apply {
-                    replace(R.id.flDialog, activityDialog)
-                    commit()
-                }
+                logsDialog.setData(getFormattedDate(dateToShow), logsList)
                 flDialog.translationZ = 10f
                 flDialog.visibility = View.VISIBLE
                 btnViewActivity.text = "View Stats"
@@ -118,6 +123,9 @@ class ViewHistoryFragment(logsAdapter: LogsAdapter) : Fragment() {
         p.getHistoryByDate(date) {
             btnDatePicker.text = getFormattedDate(it.date)
             setDailyTrackerUI(it)
+            if(showLogs) {
+                logsDialog.setData(getFormattedDate(dateToShow), logsList)
+            }
         }
     }
 
@@ -156,22 +164,18 @@ class ViewHistoryFragment(logsAdapter: LogsAdapter) : Fragment() {
         chartHistory.axisRight.setDrawGridLines(false)
         chartHistory.axisRight.setDrawLabels(false)
         chartHistory.xAxis.setDrawAxisLine(false)
-        chartHistory.xAxis.position = XAxis.XAxisPosition.BOTTOM_INSIDE
-        chartHistory.barData
         chartHistory.xAxis.setDrawGridLines(false)
-        chartHistory.xAxis.textColor = resources.getColor(R.color.white)
+        chartHistory.xAxis.textColor = resources.getColor(R.color.main_color_1)
         chartHistory.description.isEnabled = false
         chartHistory.setScaleEnabled(false)
         chartHistory.setOnChartValueSelectedListener(object: OnChartValueSelectedListener {
             override fun onValueSelected(e: Entry?, h: Highlight?) {
                 if(e != null) {
-                    dateToShow = graphDatesList[e?.x?.toInt()!!]
+                    dateToShow = graphDatesList[e.x.toInt()]
                     updateTrackerDate(dateToShow)
                 }
             }
-
             override fun onNothingSelected() {}
-
         })
     }
 

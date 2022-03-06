@@ -69,7 +69,7 @@ class HistoryViewModel(application: Application, appRepository: AppRepository) :
         return goalSteps
     }
 
-    fun editHistory(editedHistoryActivity: HistoryActivity) {
+    fun saveHistory(editedHistoryActivity: HistoryActivity) {
 
         val logIds = mutableListOf<Int>()
         for(log: Log in editedHistoryActivity.logs)
@@ -81,17 +81,23 @@ class HistoryViewModel(application: Application, appRepository: AppRepository) :
                 removedLogs.add(log)
         }
 
-        for(log: Log in editedHistoryActivity.logs) {
+        if(editedHistoryActivity.logs.isEmpty()) {
+            viewModelScope.launch(Dispatchers.IO) {
+                repository.addLog(Log(0, getTimestamp(editedHistoryActivity.date), "", 0, editedHistoryActivity.goalName, editedHistoryActivity.goalSteps))
+            }
+        } else {
+            for (log: Log in editedHistoryActivity.logs) {
 
-            log.goalName = editedHistoryActivity.goalName
-            log.goalSteps = editedHistoryActivity.goalSteps
-            if(log.id == 0) {
-                viewModelScope.launch(Dispatchers.IO) {
-                    repository.addLog(log)
-                }
-            } else {
-                viewModelScope.launch(Dispatchers.IO) {
-                    repository.updateLog(log)
+                log.goalName = editedHistoryActivity.goalName
+                log.goalSteps = editedHistoryActivity.goalSteps
+                if (log.id == 0) {
+                    viewModelScope.launch(Dispatchers.IO) {
+                        repository.addLog(log)
+                    }
+                } else {
+                    viewModelScope.launch(Dispatchers.IO) {
+                        repository.updateLog(log)
+                    }
                 }
             }
         }

@@ -9,13 +9,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import androidx.fragment.app.activityViewModels
 import com.example.keepfit_kotlin.LinearLayoutManagerWrapper
 import com.example.keepfit_kotlin.R
 import com.example.keepfit_kotlin.Utils.getFormattedDate
-import com.example.keepfit_kotlin.Utils.getTimestamp
 import com.example.keepfit_kotlin.Utils.selected
+import com.example.keepfit_kotlin.data.AppRepository
 import com.example.keepfit_kotlin.data.HistoryActivity
-import com.example.keepfit_kotlin.data.Log
 import com.example.keepfit_kotlin.ui.home.LogsAdapter
 import kotlinx.android.synthetic.main.fragment_edit_history.*
 import java.text.SimpleDateFormat
@@ -23,10 +23,9 @@ import java.util.*
 
 class EditHistoryFragment(logsAdapter: LogsAdapter) : Fragment() {
 
+    private val viewModel by activityViewModels<EditHistoryViewModel>()
     private lateinit var p: HistoryFragment
     private val adapter = logsAdapter
-
-    private lateinit var editedHistoryActivity: HistoryActivity
     private var timeStr = ""
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -43,21 +42,21 @@ class EditHistoryFragment(logsAdapter: LogsAdapter) : Fragment() {
         rvLogs.layoutManager = LinearLayoutManagerWrapper(this.requireContext())
 
         ibtnBack.setOnClickListener {
-            p.onNavBack(editedHistoryActivity.date)
+            p.onNavBack(viewModel.editedHistoryActivity.date)
         }
 
         fbtnSave.setOnClickListener {
-            saveHistory()
+            p.saveHistory(viewModel.editedHistoryActivity)
+            p.onNavBack(viewModel.editedHistoryActivity.date)
         }
 
         fbtnHistoryAddSteps.setOnClickListener {
-            createLog(txtHistoryStepsInput.text.toString().toInt(), timeStr)
+            viewModel.createLog(txtHistoryStepsInput.text.toString().toInt(), timeStr)
             txtHistoryStepsInput.setText("")
             updateHistoryUI()
         }
 
         tbtnLogTime.setOnClickListener {
-
             val c = Calendar.getInstance()
             val hour = c.get(Calendar.HOUR_OF_DAY)
             val minute = c.get(Calendar.MINUTE)
@@ -70,9 +69,7 @@ class EditHistoryFragment(logsAdapter: LogsAdapter) : Fragment() {
         }
 
         spGoal.selected {
-            editedHistoryActivity.goalName = p.getGoalNames()[it]
-            editedHistoryActivity.goalSteps = p.getGoalSteps()[it]
-            editedHistoryActivity.goalProgress = editedHistoryActivity.totalSteps.toFloat() / editedHistoryActivity.goalSteps
+            viewModel.setGoal(p.getGoalNames()[it], p.getGoalSteps()[it])
             updateHistoryUI()
         }
 
@@ -82,8 +79,9 @@ class EditHistoryFragment(logsAdapter: LogsAdapter) : Fragment() {
         super.onResume()
 
         val ch = p.getCurrentHistoryActivity()
-        editedHistoryActivity = HistoryActivity(ch.date, ch.totalSteps, ch.goalName, ch.goalSteps, ch.goalProgress, ch.logs.toMutableList())
-        lblDate.text = getFormattedDate(editedHistoryActivity.date)
+        viewModel.editedHistoryActivity = HistoryActivity(ch.date, ch.totalSteps, ch.goalName, ch.goalSteps, ch.goalProgress, ch.logs.toMutableList())
+
+        lblDate.text = getFormattedDate(viewModel.editedHistoryActivity.date)
         timeStr = SimpleDateFormat("HH:mm").format(Date())
         tbtnLogTime.text = timeStr
         updateHistoryUI()
@@ -94,40 +92,23 @@ class EditHistoryFragment(logsAdapter: LogsAdapter) : Fragment() {
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                 spGoal.adapter = adapter
 
-                if(allGoalNames.contains(editedHistoryActivity.goalName))
-                    spGoal.setSelection(adapter.getPosition(editedHistoryActivity.goalName))
+                if(allGoalNames.contains(viewModel.editedHistoryActivity.goalName))
+                    spGoal.setSelection(adapter.getPosition(viewModel.editedHistoryActivity.goalName))
                 else
                     spGoal.setSelection(0)
             }
     }
 
     fun deleteLog(logIndex: Int) {
-
-        val log = editedHistoryActivity.logs[logIndex]
-        editedHistoryActivity.logs.removeAt(logIndex)
-        editedHistoryActivity.totalSteps -= log.steps
-        editedHistoryActivity.goalProgress = editedHistoryActivity.totalSteps.toFloat() / editedHistoryActivity.goalSteps
+        viewModel.deleteLog(logIndex)
         updateHistoryUI()
     }
 
     private fun updateHistoryUI() {
 
-        val percentProgress = (editedHistoryActivity.goalProgress * 100).toInt()
-        lblSteps.text = "${editedHistoryActivity.totalSteps} ($percentProgress%)"
+        val percentProgress = (viewModel.editedHistoryActivity.goalProgress * 100).toInt()
+        lblSteps.text = "${viewModel.editedHistoryActivity.totalSteps} ($percentProgress%)"
         ObjectAnimator.ofInt(pbTrackerStepsBar, "progress", percentProgress).setDuration(500).start()
-        adapter.setData(editedHistoryActivity.logs)
-    }
-
-    private fun createLog(steps: Int, time: String) {
-
-        editedHistoryActivity.logs.add(Log(0, getTimestamp(editedHistoryActivity.date), time, steps, p.getGoalNames()[spGoal.selectedItemId.toInt()], p.getGoalSteps()[spGoal.selectedItemId.toInt()]))
-        editedHistoryActivity.logs.sortByDescending { it.time }
-        editedHistoryActivity.totalSteps += steps
-        editedHistoryActivity.goalProgress = editedHistoryActivity.totalSteps.toFloat() / editedHistoryActivity.goalSteps
-    }
-
-    private fun saveHistory() {
-        p.editHistory(editedHistoryActivity)
-        p.onNavBack(editedHistoryActivity.date)
+        adapter.setData(viewModel.editedHistoryActivity.logs)
     }
 }
