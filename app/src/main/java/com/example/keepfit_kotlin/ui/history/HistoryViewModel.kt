@@ -4,6 +4,8 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
+import com.example.keepfit_kotlin.Utils.getDate
+import com.example.keepfit_kotlin.Utils.getTimestamp
 import com.example.keepfit_kotlin.Utils.observeOnceNoLC
 import com.example.keepfit_kotlin.data.AppRepository
 import com.example.keepfit_kotlin.data.Goal
@@ -22,10 +24,8 @@ class HistoryViewModel(application: Application, appRepository: AppRepository) :
 
     fun getHistoryByDate(date: String, onRetrieve: (HistoryActivity) -> Unit) {
 
-        lateinit var activityLogs: List<Log>
-
-            repository.getLogsByDate(date).observeOnceNoLC {
-                activityLogs = it
+            repository.getLogsByDate(getTimestamp(date)).observeOnceNoLC {
+                val activityLogs = it
 
                 if (activityLogs.isNotEmpty()) {
 
@@ -102,5 +102,40 @@ class HistoryViewModel(application: Application, appRepository: AppRepository) :
             }
         }
         currentHistoryActivity = editedHistoryActivity
+    }
+
+    fun getGraphData(startDate: String, endDate: String, onRetrieve: (List<HistoryActivity>) -> Unit) {
+
+        repository.getLogsByDateRange(getTimestamp(startDate), getTimestamp(endDate)).observeOnceNoLC {
+
+            val activityLogs = it
+            val dates = getDatesBetween(getTimestamp(startDate), getTimestamp(endDate))
+            val historyData = List(dates.size) { d -> HistoryActivity(getDate(dates[d]), 0, "", 0, 0F, mutableListOf()) }
+
+            for(log: Log in activityLogs) {
+                val history = historyData[dates.indexOf(log.date)]
+                history.totalSteps += log.steps
+                history.goalName = log.goalName
+                history.goalSteps = log.goalSteps
+                history.logs.add(log)
+            }
+
+            for(history: HistoryActivity in historyData) {
+                if(history.goalSteps > 0)
+                    history.goalProgress = history.totalSteps.toFloat() / history.goalSteps
+            }
+
+            onRetrieve(historyData)
+        }
+    }
+
+    private fun getDatesBetween(startDate: Long, endDate: Long): List<Long> {
+        val dates = mutableListOf<Long>()
+        var date = startDate
+        while(date <= endDate) {
+            dates.add(date)
+            date += 86400000
+        }
+        return dates
     }
 }

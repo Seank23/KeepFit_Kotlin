@@ -8,7 +8,7 @@ data class Log (
 
     @PrimaryKey(autoGenerate = true)
     val id: Int,
-    var date: String,
+    var date: Long,
     var time: String,
     var steps: Int,
     var goalName: String,

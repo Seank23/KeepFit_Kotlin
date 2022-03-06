@@ -26,7 +26,7 @@ class LogsAdapter(parentFragment: Fragment) : RecyclerView.Adapter<LogsAdapter.L
     override fun onBindViewHolder(holder: LogViewHolder, position: Int) {
         holder.itemView.apply {
 
-            if(logList[position].date == "") {
+            if(logList[position].date == 0L) {
                 lblLogSteps.text = "No steps recorded"
                 lblLogTime.visibility = View.INVISIBLE
                 ibtnDelete.visibility = View.INVISIBLE
@@ -55,7 +55,7 @@ class LogsAdapter(parentFragment: Fragment) : RecyclerView.Adapter<LogsAdapter.L
     }
 
     fun setData(logs: List<Log>) {
-        logList = logs.ifEmpty { listOf(Log(0, "", "", 0, "", 0)) }
+        logList = logs.ifEmpty { listOf(Log(0, 0L, "", 0, "", 0)) }
         notifyDataSetChanged()
     }
 

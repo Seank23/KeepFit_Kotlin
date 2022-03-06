@@ -1,6 +1,7 @@
 package com.example.keepfit_kotlin
 
 import android.content.Context
+import android.text.format.DateFormat
 import android.util.DisplayMetrics
 import android.view.View
 import android.widget.AdapterView
@@ -9,7 +10,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import java.lang.IndexOutOfBoundsException
+import java.text.SimpleDateFormat
 
 object Utils {
 
@@ -34,9 +35,22 @@ object Utils {
         return "${dateStr.substring(0, 2)} ${MONTHS[dateStr.substring(2, 4).toInt() - 1]} ${dateStr.substring(4, 8)}"
     }
 
+    fun getFormattedDateNoYear(dateStr: String): String {
+        return "${dateStr.substring(0, 2)} ${MONTHS[dateStr.substring(2, 4).toInt() - 1]}"
+    }
+
     fun Int.toPx(context: Context) = this * context.resources.displayMetrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT
 
     val Int.toBool: Boolean get() = this == 1
+
+    fun getDate(timestamp: Long): String {
+        return DateFormat.format("ddMMyyyy", timestamp).toString()
+    }
+
+    fun getTimestamp(date: String): Long {
+        val formatter = SimpleDateFormat("ddMMyyyy")
+        return formatter.parse(date).time
+    }
 
     fun <T> LiveData<T>.observeOnceNoLC(observer: Observer<T>) {
         observeForever(object : Observer<T> {

@@ -43,13 +43,10 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/lblCaption">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="History Graph"
-            android:textColor="@color/main_color_1"
-            android:textSize="20sp" />
+        <com.github.mikephil.charting.charts.BarChart
+            android:id="@+id/chartHistory"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
     </FrameLayout>
 

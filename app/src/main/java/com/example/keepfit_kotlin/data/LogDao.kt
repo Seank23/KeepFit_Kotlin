@@ -22,5 +22,8 @@ interface LogDao {
     fun getLogs(): LiveData<List<Log>>
 
     @Query("SELECT * FROM log_data WHERE date = :date ORDER BY time DESC")
-    fun getLogsByDate(date: String): LiveData<List<Log>>
+    fun getLogsByDate(date: Long): LiveData<List<Log>>
+
+    @Query("SELECT * FROM log_data WHERE date BETWEEN :startDate AND :endDate ORDER BY time DESC")
+    fun getLogsByDateRange(startDate: Long, endDate: Long): LiveData<List<Log>>
 }

@@ -14,6 +14,8 @@ import com.example.keepfit_kotlin.ui.goals.ViewGoalsFragment
 import com.example.keepfit_kotlin.ui.home.HomeViewModel
 import com.example.keepfit_kotlin.ui.home.HomeViewModelFactory
 import com.example.keepfit_kotlin.ui.home.LogsAdapter
+import java.text.SimpleDateFormat
+import java.util.*
 
 class HistoryFragment(repository: AppRepository) : Fragment(R.layout.fragment_history) {
 
@@ -55,6 +57,8 @@ class HistoryFragment(repository: AppRepository) : Fragment(R.layout.fragment_hi
     fun onDeleteLog(logIndex: Int) {
         (fragments[1]!! as EditHistoryFragment).deleteLog(logIndex)
     }
+
+    fun getGraphData(startDate: String, endDate: String, onRetrieve: (List<HistoryActivity>) -> Unit) = viewModel.getGraphData(startDate, endDate, onRetrieve)
 
     private fun setCurrentFragment(fragment: Fragment, frameLayout: Int) =
         childFragmentManager.beginTransaction().apply {

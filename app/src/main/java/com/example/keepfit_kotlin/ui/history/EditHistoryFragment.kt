@@ -12,6 +12,7 @@ import android.widget.ArrayAdapter
 import com.example.keepfit_kotlin.LinearLayoutManagerWrapper
 import com.example.keepfit_kotlin.R
 import com.example.keepfit_kotlin.Utils.getFormattedDate
+import com.example.keepfit_kotlin.Utils.getTimestamp
 import com.example.keepfit_kotlin.Utils.selected
 import com.example.keepfit_kotlin.data.HistoryActivity
 import com.example.keepfit_kotlin.data.Log
@@ -119,7 +120,7 @@ class EditHistoryFragment(logsAdapter: LogsAdapter) : Fragment() {
 
     private fun createLog(steps: Int, time: String) {
 
-        editedHistoryActivity.logs.add(Log(0, editedHistoryActivity.date, time, steps, p.getGoalNames()[spGoal.selectedItemId.toInt()], p.getGoalSteps()[spGoal.selectedItemId.toInt()]))
+        editedHistoryActivity.logs.add(Log(0, getTimestamp(editedHistoryActivity.date), time, steps, p.getGoalNames()[spGoal.selectedItemId.toInt()], p.getGoalSteps()[spGoal.selectedItemId.toInt()]))
         editedHistoryActivity.logs.sortByDescending { it.time }
         editedHistoryActivity.totalSteps += steps
         editedHistoryActivity.goalProgress = editedHistoryActivity.totalSteps.toFloat() / editedHistoryActivity.goalSteps

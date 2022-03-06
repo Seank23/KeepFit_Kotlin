@@ -28,12 +28,16 @@ class HomeFragment(repository: AppRepository) : Fragment(R.layout.fragment_home)
         // Initialise app data from database
         viewModel.getGoals.observe(viewLifecycleOwner) {
             if(!hasInit) {
-                lblCurGoalName.text = viewModel.getActiveGoalName()
-                lblCurGoalSteps.text = "${viewModel.getActiveGoalSteps()} steps"
-                viewModel.getTodaysLogs.observe(viewLifecycleOwner) {
-                    if(!hasInit) {
-                        setProgressTracker(viewModel.getSteps(), viewModel.getGoalProgress())
-                        hasInit = true
+                if(it.isEmpty())
+                    viewModel.addDefaultGoal()
+                else {
+                    lblCurGoalName.text = viewModel.getActiveGoalName()
+                    lblCurGoalSteps.text = "${viewModel.getActiveGoalSteps()} steps"
+                    viewModel.getTodaysLogs.observe(viewLifecycleOwner) {
+                        if (!hasInit) {
+                            setProgressTracker(viewModel.getSteps(), viewModel.getGoalProgress())
+                            hasInit = true
+                        }
                     }
                 }
             }

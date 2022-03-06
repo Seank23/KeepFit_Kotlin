@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
+import com.example.keepfit_kotlin.Utils.getTimestamp
 import com.example.keepfit_kotlin.data.AppRepository
 import com.example.keepfit_kotlin.data.Goal
 import com.example.keepfit_kotlin.data.Log
@@ -15,7 +16,7 @@ import java.util.*
 class HomeViewModel(application: Application, appRepository: AppRepository) : AndroidViewModel(application) {
 
     private val repository = appRepository
-    val getTodaysLogs: LiveData<List<Log>> = repository.getLogsByDate(SimpleDateFormat("ddMMyyyy").format(Date()))
+    val getTodaysLogs: LiveData<List<Log>> = repository.getLogsByDate(getTimestamp(SimpleDateFormat("ddMMyyyy").format(Date())))
     val getGoals: LiveData<List<Goal>> = repository.getGoals
 
 
@@ -32,7 +33,7 @@ class HomeViewModel(application: Application, appRepository: AppRepository) : An
     }
 
     fun addSteps(steps: Int) {
-        val log = Log(0, SimpleDateFormat("ddMMyyyy").format(Date()), SimpleDateFormat("HH:mm").format(Date()), steps, getActiveGoalName(), getActiveGoalSteps())
+        val log = Log(0, getTimestamp(SimpleDateFormat("ddMMyyyy").format(Date())), SimpleDateFormat("HH:mm").format(Date()), steps, getActiveGoalName(), getActiveGoalSteps())
         addLog(log)
     }
 
@@ -70,5 +71,12 @@ class HomeViewModel(application: Application, appRepository: AppRepository) : An
             getSteps().toFloat() / getActiveGoal()!!.steps
         else
             0f
+    }
+
+    fun addDefaultGoal() {
+        val defaultGoal = Goal(0, "Default Goal", 5000, true)
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.addGoal(defaultGoal)
+        }
     }
 }
