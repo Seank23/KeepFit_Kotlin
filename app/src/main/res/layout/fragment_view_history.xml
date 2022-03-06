@@ -21,29 +21,50 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/lblCaption"
-        android:layout_width="wrap_content"
+    <FrameLayout
+        android:id="@+id/flGraphDate"
+        android:layout_width="350dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:text="View and edit your fitness activity history"
-        android:textColor="@color/main_color_1"
-        android:textSize="20sp"
+        android:layout_marginTop="32dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lblTitle" />
+        app:layout_constraintTop_toBottomOf="@+id/lblTitle">
+
+        <TextView
+            android:id="@+id/lblCaption"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:text="View 7 days starting from"
+            android:textColor="@color/main_color_1"
+            android:textSize="18sp" />
+
+        <Button
+            android:id="@+id/btnGraphDatePicker"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:layout_width="140dp"
+            android:layout_height="48dp"
+            android:layout_gravity="right"
+            android:backgroundTint="@color/white"
+            android:elevation="@dimen/cardview_default_elevation"
+            android:text="30 Jan 2022"
+            android:textSize="16sp"
+            app:strokeColor="@color/main_color_1" />
+
+    </FrameLayout>
 
     <FrameLayout
         android:id="@+id/flHistoryGraph"
         android:layout_width="350dp"
         android:layout_height="0dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"
         app:layout_constraintBottom_toTopOf="@+id/constraintLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lblCaption">
+        app:layout_constraintTop_toBottomOf="@+id/flGraphDate">
 
         <com.github.mikephil.charting.charts.BarChart
             android:id="@+id/chartHistory"

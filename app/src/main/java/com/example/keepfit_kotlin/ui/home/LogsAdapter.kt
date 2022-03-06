@@ -59,7 +59,7 @@ class LogsAdapter(parentFragment: Fragment) : RecyclerView.Adapter<LogsAdapter.L
         if(logListMutable.size > 1) {
             for(log: Log  in logListMutable) {
                 if(log.time == "")
-                    logListMutable.remove(log)
+                    logListMutable.remove(log) // Remove placeholder log
             }
         }
         logList = logListMutable.ifEmpty { listOf(Log(0, 0L, "", 0, "", 0)) }

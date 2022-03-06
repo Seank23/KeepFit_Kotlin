@@ -16,6 +16,7 @@ import com.example.keepfit_kotlin.R
 import com.example.keepfit_kotlin.Utils.getDateString
 import com.example.keepfit_kotlin.Utils.getFormattedDate
 import com.example.keepfit_kotlin.Utils.getFormattedDateNoYear
+import com.example.keepfit_kotlin.Utils.getTimestamp
 import com.example.keepfit_kotlin.Utils.toPx
 import com.example.keepfit_kotlin.data.HistoryActivity
 import com.example.keepfit_kotlin.data.Log
@@ -65,18 +66,12 @@ class ViewHistoryFragment(logsAdapter: LogsAdapter) : Fragment() {
         setupGraph()
 
         btnDatePicker.setOnClickListener {
-            val c = Calendar.getInstance()
-            val year = c.get(Calendar.YEAR)
-            val month = c.get(Calendar.MONTH)
-            val day = c.get(Calendar.DAY_OF_MONTH)
+            createDatePicker(false)
+        }
 
-            val datePicker = DatePickerDialog(requireContext(), { _, year, month, day ->
-                dateToShow = getDateString(year, month, day)
-                updateTrackerDate(dateToShow)
-            }, year, month, day)
-
-            datePicker.datePicker.maxDate = System.currentTimeMillis() - 86400000
-            datePicker.show()
+        btnGraphDatePicker.text = getFormattedDate(graphStartDate)
+        btnGraphDatePicker.setOnClickListener {
+            createDatePicker(true)
         }
 
         logsDialog = ViewHistoryDialogFragment(adapter)
@@ -158,7 +153,6 @@ class ViewHistoryFragment(logsAdapter: LogsAdapter) : Fragment() {
 
     private fun setupGraph() {
 
-        chartHistory.animateXY(1000, 1000)
         chartHistory.axisLeft.setDrawGridLines(false)
         chartHistory.axisLeft.textColor = resources.getColor(R.color.main_color_1)
         chartHistory.axisRight.setDrawGridLines(false)
@@ -182,6 +176,7 @@ class ViewHistoryFragment(logsAdapter: LogsAdapter) : Fragment() {
     private fun setHistoryGraphData() {
 
         p.getGraphData(graphStartDate, graphEndDate) {
+            graphDatesList.clear()
             val datesList = mutableListOf<String>()
             val goalVals = mutableListOf<BarEntry>()
             val stepsVals = mutableListOf<BarEntry>()
@@ -205,7 +200,33 @@ class ViewHistoryFragment(logsAdapter: LogsAdapter) : Fragment() {
 
             chartHistory.xAxis.valueFormatter = IndexAxisValueFormatter(datesList)
             chartHistory.data = barData
-
+            chartHistory.invalidate()
+            chartHistory.animateXY(1000, 1000)
+            btnGraphDatePicker.text = getFormattedDate(graphStartDate)
         }
+    }
+
+    private fun createDatePicker(forGraph: Boolean) {
+        val c = Calendar.getInstance()
+        val year = c.get(Calendar.YEAR)
+        val month = c.get(Calendar.MONTH)
+        val day = c.get(Calendar.DAY_OF_MONTH)
+
+        val datePicker = DatePickerDialog(requireContext(), { _, year, month, day ->
+            if(forGraph) {
+                graphStartDate = getDateString(year, month, day)
+                graphEndDate = SimpleDateFormat("ddMMyyyy").format(Date(getTimestamp(getDateString(year, month, day)) + 518400000))
+                setHistoryGraphData()
+            } else {
+                dateToShow = getDateString(year, month, day)
+                updateTrackerDate(dateToShow)
+            }
+        }, year, month, day)
+
+        if(forGraph)
+            datePicker.datePicker.maxDate = System.currentTimeMillis() - 604800000
+        else
+            datePicker.datePicker.maxDate = System.currentTimeMillis() - 86400000
+        datePicker.show()
     }
 }

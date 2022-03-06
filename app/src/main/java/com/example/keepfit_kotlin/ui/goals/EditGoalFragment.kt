@@ -1,6 +1,7 @@
 package com.example.keepfit_kotlin.ui.goals
 
 import android.app.AlertDialog
+import android.content.Context
 import android.os.Bundle
 import android.text.TextUtils
 import androidx.fragment.app.Fragment
@@ -11,6 +12,7 @@ import android.widget.Toast
 import com.example.keepfit_kotlin.R
 import com.example.keepfit_kotlin.Utils.safeInt
 import com.example.keepfit_kotlin.data.Goal
+import com.example.keepfit_kotlin.ui.settings.Prefs
 import kotlinx.android.synthetic.main.fragment_edit_goal.*
 
 class EditGoalFragment : Fragment() {
@@ -29,6 +31,14 @@ class EditGoalFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
+
+        val prefs = activity?.getPreferences(Context.MODE_PRIVATE)!!
+        prefs.registerOnSharedPreferenceChangeListener { sharedPreferences, _ ->
+            if(context != null) {
+                if (Prefs.getPrefs(sharedPreferences, getString(R.string.enable_goal_editing)) == 0)
+                    p.onNavBack()
+            }
+        }
 
         fbtnSave.setOnClickListener {
             updateGoal()

@@ -82,6 +82,7 @@ class HistoryViewModel(application: Application, appRepository: AppRepository) :
         }
 
         if(editedHistoryActivity.logs.isEmpty()) {
+            // Add placeholder log to store goal when no logs are present
             viewModelScope.launch(Dispatchers.IO) {
                 repository.addLog(Log(0, getTimestamp(editedHistoryActivity.date), "", 0, editedHistoryActivity.goalName, editedHistoryActivity.goalSteps))
             }

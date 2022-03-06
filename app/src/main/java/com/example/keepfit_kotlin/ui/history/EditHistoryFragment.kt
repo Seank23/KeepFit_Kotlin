@@ -2,6 +2,7 @@ package com.example.keepfit_kotlin.ui.history
 
 import android.animation.ObjectAnimator
 import android.app.TimePickerDialog
+import android.content.Context
 import android.icu.util.Calendar
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -17,6 +18,7 @@ import com.example.keepfit_kotlin.Utils.selected
 import com.example.keepfit_kotlin.data.AppRepository
 import com.example.keepfit_kotlin.data.HistoryActivity
 import com.example.keepfit_kotlin.ui.home.LogsAdapter
+import com.example.keepfit_kotlin.ui.settings.Prefs
 import kotlinx.android.synthetic.main.fragment_edit_history.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -27,6 +29,8 @@ class EditHistoryFragment(logsAdapter: LogsAdapter) : Fragment() {
     private lateinit var p: HistoryFragment
     private val adapter = logsAdapter
     private var timeStr = ""
+    private lateinit var allGoalNames: MutableList<String>
+    private lateinit var allGoalSteps: MutableList<Int>
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
@@ -40,6 +44,14 @@ class EditHistoryFragment(logsAdapter: LogsAdapter) : Fragment() {
 
         rvLogs.adapter = adapter
         rvLogs.layoutManager = LinearLayoutManagerWrapper(this.requireContext())
+
+        val prefs = activity?.getPreferences(Context.MODE_PRIVATE)!!
+        prefs.registerOnSharedPreferenceChangeListener { sharedPreferences, _ ->
+            if(context != null) {
+                if (Prefs.getPrefs(sharedPreferences, getString(R.string.enable_history_editing)) == 0)
+                    p.onNavBack(viewModel.editedHistoryActivity.date)
+            }
+        }
 
         ibtnBack.setOnClickListener {
             p.onNavBack(viewModel.editedHistoryActivity.date)
@@ -62,14 +74,14 @@ class EditHistoryFragment(logsAdapter: LogsAdapter) : Fragment() {
             val minute = c.get(Calendar.MINUTE)
 
             val timePicker = TimePickerDialog(requireContext(), { _, hour, minute ->
-                timeStr = "$hour:$minute"
+                timeStr = if(minute < 10) "$hour:0$minute" else "$hour:$minute"
                 tbtnLogTime.text = timeStr
             }, hour, minute, true)
             timePicker.show()
         }
 
         spGoal.selected {
-            viewModel.setGoal(p.getGoalNames()[it], p.getGoalSteps()[it])
+            viewModel.setGoal(allGoalNames[it], allGoalSteps[it])
             updateHistoryUI()
         }
 
@@ -86,7 +98,13 @@ class EditHistoryFragment(logsAdapter: LogsAdapter) : Fragment() {
         tbtnLogTime.text = timeStr
         updateHistoryUI()
 
-        val allGoalNames = p.getGoalNames()
+        allGoalNames = p.getGoalNames().toMutableList()
+        allGoalSteps = p.getGoalSteps().toMutableList()
+        // Leave existing goal unchanged if goal does not exist
+        if(!allGoalNames.contains(viewModel.editedHistoryActivity.goalName) && viewModel.editedHistoryActivity.goalName != "None") {
+            allGoalNames.add(viewModel.editedHistoryActivity.goalName)
+            allGoalSteps.add(viewModel.editedHistoryActivity.goalSteps)
+        }
         ArrayAdapter(requireContext(), R.layout.spinner_item, allGoalNames)
             .also { adapter ->
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
