@@ -21,13 +21,7 @@ import com.example.keepfit_kotlin.Utils.toPx
 import com.example.keepfit_kotlin.data.HistoryActivity
 import com.example.keepfit_kotlin.data.Log
 import com.example.keepfit_kotlin.ui.home.LogsAdapter
-import com.github.mikephil.charting.components.AxisBase
-import com.github.mikephil.charting.components.Description
-import com.github.mikephil.charting.components.XAxis
-import com.github.mikephil.charting.data.BarData
-import com.github.mikephil.charting.data.BarDataSet
-import com.github.mikephil.charting.data.BarEntry
-import com.github.mikephil.charting.data.Entry
+import com.github.mikephil.charting.data.*
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener
@@ -179,27 +173,34 @@ class ViewHistoryFragment(logsAdapter: LogsAdapter) : Fragment() {
             graphDatesList.clear()
             val datesList = mutableListOf<String>()
             val goalVals = mutableListOf<BarEntry>()
-            val stepsVals = mutableListOf<BarEntry>()
+            val stepsVals = mutableListOf<Entry>()
 
             for((index, data: HistoryActivity) in it.withIndex()) {
                 graphDatesList.add(data.date)
                 datesList.add(getFormattedDateNoYear(data.date))
                 goalVals.add(BarEntry(index.toFloat(), data.goalSteps.toFloat()))
-                stepsVals.add(BarEntry(index.toFloat(), data.totalSteps.toFloat()))
+                stepsVals.add(Entry(index.toFloat(), data.totalSteps.toFloat()))
             }
 
             val goalDataset = BarDataSet(goalVals, "Goal")
             goalDataset.color = resources.getColor(R.color.main_color_3)
             goalDataset.setDrawValues(false)
             goalDataset.highLightColor = resources.getColor(R.color.white)
-            val stepsDataset = BarDataSet(stepsVals, "Total Steps")
+
+            val stepsDataset = LineDataSet(stepsVals, "Total Steps")
             stepsDataset.color = resources.getColor(R.color.main_color_1)
             stepsDataset.valueTextColor = resources.getColor(R.color.main_color_1)
-            goalDataset.highLightColor = resources.getColor(R.color.white)
-            val barData = BarData(goalDataset, stepsDataset)
+            stepsDataset.lineWidth = 3f
+            stepsDataset.valueTextSize = 12f
+            stepsDataset.isHighlightEnabled = false
+            stepsDataset.circleColors = listOf(resources.getColor(R.color.main_color_1))
+
+            val combinedData = CombinedData()
+            combinedData.setData(BarData(goalDataset))
+            combinedData.setData(LineData(stepsDataset))
 
             chartHistory.xAxis.valueFormatter = IndexAxisValueFormatter(datesList)
-            chartHistory.data = barData
+            chartHistory.data = combinedData
             chartHistory.invalidate()
             chartHistory.animateXY(1000, 1000)
             btnGraphDatePicker.text = getFormattedDate(graphStartDate)

@@ -159,7 +159,7 @@
         android:clickable="true"
         android:elevation="@dimen/cardview_default_elevation"
         android:focusable="true"
-        android:text="Detailed History"
+        android:text="View Historical Activity"
         android:textSize="20sp"
         app:icon="@drawable/ic_action_history"
         app:layout_constraintBottom_toTopOf="@+id/flRecordSteps"

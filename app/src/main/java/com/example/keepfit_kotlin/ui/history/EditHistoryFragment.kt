@@ -10,10 +10,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import com.example.keepfit_kotlin.LinearLayoutManagerWrapper
 import com.example.keepfit_kotlin.R
 import com.example.keepfit_kotlin.Utils.getFormattedDate
+import com.example.keepfit_kotlin.Utils.safeInt
 import com.example.keepfit_kotlin.Utils.selected
 import com.example.keepfit_kotlin.data.AppRepository
 import com.example.keepfit_kotlin.data.HistoryActivity
@@ -63,7 +65,11 @@ class EditHistoryFragment(logsAdapter: LogsAdapter) : Fragment() {
         }
 
         fbtnHistoryAddSteps.setOnClickListener {
-            viewModel.createLog(txtHistoryStepsInput.text.toString().toInt(), timeStr)
+            val steps = safeInt(txtHistoryStepsInput.text.toString(), 0)
+            if(steps > 0)
+                viewModel.createLog(steps, timeStr)
+            else
+                Toast.makeText(this.context, "Please enter an amount of steps", Toast.LENGTH_SHORT).show()
             txtHistoryStepsInput.setText("")
             updateHistoryUI()
         }

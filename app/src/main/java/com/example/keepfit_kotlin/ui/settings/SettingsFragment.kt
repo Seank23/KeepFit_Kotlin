@@ -38,6 +38,9 @@ class SettingsFragment(repository: AppRepository) : Fragment(R.layout.fragment_s
         }
         spTheme.setSelection(Prefs.getPrefs(activity?.getPreferences(Context.MODE_PRIVATE)!!, getString(R.string.theme_mode)))
 
+        // Theme selection unfinished
+        spTheme.visibility = View.INVISIBLE
+
         // Switch setup
         swGoalEditing.setOnClickListener { onClickSwitch(R.id.swGoalEditing, swGoalEditing.isChecked) }
         swHistoryEditing.setOnClickListener { onClickSwitch(R.id.swHistoryEditing, swHistoryEditing.isChecked) }
