@@ -72,7 +72,7 @@ class HomeFragment(repository: AppRepository) : Fragment(R.layout.fragment_home)
             if(steps > 0)
                 viewModel.addSteps(steps)
             else
-                Toast.makeText(this.context, "Please enter an amount of steps", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this.context, "Please enter a valid amount of steps", Toast.LENGTH_SHORT).show()
             txtStepsInput.setText("")
         }
     }

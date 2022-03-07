@@ -44,6 +44,7 @@ class EditHistoryFragment(logsAdapter: LogsAdapter) : Fragment() {
     override fun onStart() {
         super.onStart()
 
+        adapter.readOnly = false
         rvLogs.adapter = adapter
         rvLogs.layoutManager = LinearLayoutManagerWrapper(this.requireContext())
 
